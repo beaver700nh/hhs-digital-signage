@@ -1,0 +1,43 @@
+.carousel-widget {
+	display: block;
+	position: absolute;
+	inset: 0;
+	overflow: hidden;
+
+	transition:
+		opacity 0.5s ease-in-out,
+		transform 1.0s ease-out;
+
+	&.inbound {
+		transform: translateX(100%);
+		opacity: 0;
+	}
+	&.focused {
+		transform: translateX(0%);
+		opacity: 1;
+	}
+	&.outbound {
+		transform: translateX(-100%);
+		opacity: 0;
+	}
+	&.unloaded {
+		visibility: hidden;
+		opacity: 0;
+	}
+
+	&:nth-child(1) {
+		background-color: rgba(from pink r g b / 0.8);
+	}
+	&:nth-child(2) {
+		background-color: rgba(from goldenrod r g b / 0.8);
+	}
+	&:nth-child(3) {
+		background-color: rgba(from lime r g b / 0.8);
+	}
+	&:nth-child(4) {
+		background-color: rgba(from skyblue r g b / 0.8);
+	}
+	&:nth-child(5) {
+		background-color: rgba(from violet r g b / 0.8);
+	}
+}

@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import type { WidgetRenderer } from '../DataFetcher'
+import type { WidgetRenderer } from '../WidgetWrapper'
 
 const TestWidget: WidgetRenderer = ({ promise }) => {
 	const data = use(promise)
