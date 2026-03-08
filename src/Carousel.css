@@ -1,3 +1,18 @@
 #carousel {
-	flex: 1 1 content;
+	flex: 1 0 0;
+	overflow: hidden;
+}
+
+.widget {
+	height: 200px;
+	overflow: hidden;
+	margin: 0;
+
+	&.one {
+		background-color: blueviolet;
+	}
+
+	&.two {
+		background-color: darkcyan;
+	}
 }
