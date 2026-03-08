@@ -1,0 +1,21 @@
+main {
+  padding: 2rem;
+  text-align: center;
+}
+
+h1 {
+  font-family: var(--font-title);
+}
+
+.foo {
+  font-size: 6rem;
+  font-weight: 700;
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
