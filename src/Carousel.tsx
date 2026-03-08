@@ -7,7 +7,7 @@ import Widgets, { nextWidget } from './widgets/widgets'
 
 import './Carousel.css'
 
-const REFRESH_INTERVAL = moment.duration(10, 'seconds').asMilliseconds()
+const REFRESH_INTERVAL = moment.duration(2, 'seconds').asMilliseconds() // Temporarily really fast
 
 export const ActiveWidgetContext = createContext(0)
 
@@ -17,7 +17,7 @@ export default function Carousel() {
 	useEffect(() => {
 		const interval = setInterval(() => setActiveWidget(nextWidget), REFRESH_INTERVAL)
 		return () => clearInterval(interval)
-	}, [])
+	}, [REFRESH_INTERVAL])
 
 	return (
 		<article id="carousel">

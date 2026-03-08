@@ -13,7 +13,7 @@ export default function Slideshow() {
   useEffect(() => {
     const interval = setInterval(() => setRefreshKey(_ => Math.random()), REFRESH_INTERVAL)
     return () => clearInterval(interval)
-  }, [])
+  }, [REFRESH_INTERVAL])
 
   return (
 		<article id="slideshow">

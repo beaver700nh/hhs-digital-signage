@@ -1,9 +1,9 @@
 import PlaceholderWidget from './placeholder/PlaceholderWidget'
-import TestWidget from './test/TestWidget'
+import ScheduleWidget from './schedule/ScheduleWidget'
 import TestWidget2 from './test2/TestWidget2'
 
 const Widgets = [
-	TestWidget,
+	ScheduleWidget,
 	TestWidget2,
 	PlaceholderWidget,
 ]
