@@ -2,4 +2,5 @@
 	flex: 1 0 0;
 	overflow: hidden;
 	position: relative;
+	background-color: var(--bg-plain);
 }

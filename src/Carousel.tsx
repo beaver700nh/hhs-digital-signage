@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from 'react'
 import moment from 'moment'
 
+import Dots from './widgets/Dots'
 import WidgetWrapper from './widgets/WidgetWrapper'
 import Widgets, { nextWidget } from './widgets/widgets'
 
@@ -25,6 +26,7 @@ export default function Carousel() {
 					index={index}
 					RendererComponent={Widget}
 				/>)}
+				<Dots count={Widgets.length} />
 			</ActiveWidgetContext.Provider>
 		</article>
 	)

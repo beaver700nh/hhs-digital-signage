@@ -10,6 +10,8 @@
 	--font-body: "Roboto Condensed", Helvetica, Arial, sans-serif;
 
 	font-family: var(--font-body);
+	color: var(--fg-plain);
+	background-color: var(--bg-plain);
 
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;

@@ -3,7 +3,7 @@ import moment from 'moment';
 
 import { fetchCalendarEvents, type EventsType } from '@/google/api'
 import { nextWidget, prevWidget } from './widgets';
-import { ActiveWidgetContext } from '../Carousel'
+import { ActiveWidgetContext } from '@/Carousel'
 import LoadingWidget from './LoadingWidget'
 
 import './WidgetWrapper.css'
