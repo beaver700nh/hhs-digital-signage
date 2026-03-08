@@ -1,24 +1,26 @@
 :root {
-  --bg-plain:   hsl( 0,  0%, 96%);
-  --bg-accent1: hsl( 4, 80%, 32%);
-  --bg-accent2: hsl( 4, 80%, 16%);
-  --fg-plain:   hsl( 0,  0%,  4%);
-  --fg-accent1: hsl( 4, 80%, 28%);
-  --fg-accent2: hsl(32, 80%, 48%);
+	--bg-plain:   hsl( 0,  0%, 90%);
+	--bg-accent1: hsl( 4, 80%, 32%);
+	--bg-accent2: hsl( 4, 80%, 16%);
+	--fg-plain:   hsl( 0,  0%,  4%);
+	--fg-accent1: hsl( 4, 80%, 28%);
+	--fg-accent2: hsl(32, 80%, 48%);
 
-  --font-title: Lato, Tahoma, sans-serif;
-  --font-body: "Roboto Condensed", Helvetica, Arial, sans-serif;
+	--font-title: Lato, Tahoma, sans-serif;
+	--font-body: "Roboto Condensed", Helvetica, Arial, sans-serif;
 
-  --spacing: 8px;
+	font-family: var(--font-body);
 
-  font-family: var(--font-body);
-
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 #root {
-  position: fixed;
-  inset: 0;
+	position: fixed;
+	inset: 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: stretch;
+	align-items: stretch;
 }
