@@ -23,6 +23,7 @@ export default function Carousel() {
 		<article id="carousel">
 			<ActiveWidgetContext.Provider value={activeWidget}>
 				{Widgets.map((Widget, index) => <WidgetWrapper
+					key={index}
 					index={index}
 					RendererComponent={Widget}
 				/>)}

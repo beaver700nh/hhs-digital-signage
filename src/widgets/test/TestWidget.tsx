@@ -6,7 +6,10 @@ const TestWidget: WidgetRenderer = ({ promise }) => {
 	const data = use(promise)
 
 	return (
-		<p className="widget one">{data.summary}</p>
+		<>
+			<p className="widget one">{data.summary}</p>
+			<pre>{JSON.stringify(data.items.map(x => `${x.summary} @ ${x.start.date} - ${x.end.date}        ${x.description}`), null, 2)}</pre>
+		</>
 	)
 }
 

@@ -2,7 +2,17 @@ export const API_KEY = import.meta.env.VITE_GAPI_KEY
 
 export interface EventsType {
 	summary: string
-	description: string
+	timeZone: string
+	items: {
+		summary: string
+		description: string
+		start: {
+			date: string
+		}
+		end: {
+			date: string
+		}
+	}[]
 }
 
 export async function fetchCalendarEvents(id: string) {
@@ -10,6 +20,9 @@ export async function fetchCalendarEvents(id: string) {
 
 	let params = new URLSearchParams({
 		key: API_KEY,
+		singleEvents: 'true',
+		orderBy: 'startTime',
+		timeMin: (new Date()).toISOString(),
 	})
 
 	url.search = params.toString()

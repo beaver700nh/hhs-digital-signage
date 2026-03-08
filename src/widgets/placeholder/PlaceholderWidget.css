@@ -1,0 +1,12 @@
+.carousel-widget > .placeholder {
+	text-align: center;
+	margin: auto 0;
+	padding: 4rem;
+	font-size: 4rem;
+	color: var(--bg-plain);
+	background-color: var(--bg-accent1);
+	border: 0.25rem solid var(--bg-accent2);
+	border-radius: 1rem;
+	opacity: 0.75;
+	box-shadow: 0 0 2rem black;
+}

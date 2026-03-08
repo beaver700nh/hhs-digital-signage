@@ -8,31 +8,32 @@ import LoadingWidget from './LoadingWidget'
 
 import './WidgetWrapper.css'
 
-export type WidgetRenderer = ComponentType<{ promise: Promise<EventsType> }> & { CAL_ID: string }
+export type WidgetRenderer = ComponentType<{ promise: Promise<EventsType> }> & { CAL_ID?: string }
 
-const REFRESH_INTERVAL = moment.duration(10, 'seconds').asMilliseconds()
+const REFRESH_INTERVAL = moment.duration(1, 'minute').asMilliseconds()
 
 export default function WidgetWrapper({ index, RendererComponent }: {
 	index: number,
 	RendererComponent: WidgetRenderer,
 }) {
-	console.log('DataFetcher render')
 	const [promise, setPromise] = useState<Promise<EventsType> | null>(null)
 
-  useEffect(() => {
-    const interval = setInterval((function iife() {
-			setPromise(fetchCalendarEvents(RendererComponent.CAL_ID))
+	useEffect(() => {
+		const interval = setInterval((function iife() {
+			if (RendererComponent.CAL_ID != null) {
+				setPromise(fetchCalendarEvents(RendererComponent.CAL_ID))
+			}
 			return iife
-    })(), REFRESH_INTERVAL)
+		})(), REFRESH_INTERVAL)
 
-    return () => clearInterval(interval)
-  }, [RendererComponent.CAL_ID])
+		return () => clearInterval(interval)
+	}, [RendererComponent.CAL_ID])
 
 	const activeWidget = useContext(ActiveWidgetContext)
 	const animationState =
 		activeWidget === index ? 'focused' :
-		activeWidget === nextWidget(index) ? 'outbound' :
 		activeWidget === prevWidget(index) ? 'inbound' :
+		activeWidget === nextWidget(index) ? 'outbound' :
 		'unloaded'
 
 	return (
