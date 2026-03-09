@@ -1,3 +1,4 @@
+import * as Regex from './regex'
 import type { NextDaySchedule } from "./parser"
 
 export default function BellSchedule({ what }:
@@ -20,7 +21,20 @@ export default function BellSchedule({ what }:
 		)
 	case 'table':
 		return (
-			<pre className="bell-sched" style={{whiteSpace: 'pre-wrap'}}>{JSON.stringify(what.schedule.data, null, 2)}</pre>
+			<table className="bell-sched table">
+				<tbody>
+					{what.schedule.data.map((line, index) =>
+						<tr
+							key={index}
+							className='line'
+							data-lunch={line.name.match(Regex.LUNCH_BLOCK)}
+						>
+							<td>{line.start} &ndash; {line.end}</td>
+							<td>{line.name}</td>
+						</tr>
+					)}
+				</tbody>
+			</table>
 		)
 	}
 }

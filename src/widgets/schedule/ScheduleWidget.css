@@ -65,7 +65,35 @@
 		white-space: nowrap;
 	}
 
-	& > * {
+	&.html > *,
+	&.text > * {
 		margin-block: 0 0.5rem;
+	}
+
+	&.table {
+		table-layout: fixed;
+		border-collapse: collapse;
+
+		.line:not(:last-child) > * {
+			padding-block-end: 1rem;
+		}
+
+		.line > :first-child {
+			text-align: end;
+			padding-inline-end: 2rem;
+			border-inline-end: 0.15rem solid var(--fg-accent1);
+		}
+
+		.line > :last-child {
+			text-align: start;
+			padding-inline-start: 2rem;
+		}
+
+		.line[data-lunch] > :last-child {
+			padding-inline-start: 3rem;
+			font-weight: normal;
+			font-style: italic;
+			text-transform: capitalize;
+		}
 	}
 }
