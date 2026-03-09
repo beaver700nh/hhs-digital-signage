@@ -1,0 +1,51 @@
+.schedule-header {
+	box-sizing: border-box;
+	width: 100%;
+	display: inline-flex;
+	flex-flow: row;
+	justify-content: start;
+	align-items: stretch;
+	gap: 1rem;
+	padding-inline: 1rem;
+	margin-block: 1rem;
+	font-family: var(--font-title);
+
+	.letter-box {
+		margin: auto 0;
+		height: 15vh;
+		aspect-ratio: 1/1;
+		font-weight: 900;
+	}
+
+	.letter {
+		color: var(--fg-accent1);
+	}
+
+	.letter-star {
+		color: var(--fg-accent2);
+	}
+
+	.headlines {
+		display: flex;
+		flex-flow: column-reverse nowrap;
+		justify-content: center;
+		align-items: start;
+		margin-block: 1rem;
+		font-size: 180%;
+		gap: 0.5rem;
+
+		.quirk {
+			color: var(--fg-accent2);
+			font-weight: 700;
+			font-style: italic;
+		}
+
+		.humanDate {
+			font-size: 125%;
+		}
+
+		.fullDate {
+			font-size: 80%;
+		}
+	}
+}

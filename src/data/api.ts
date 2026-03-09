@@ -1,12 +1,14 @@
-export const API_KEY = import.meta.env.VITE_GAPI_KEY
+import moment from "moment"
 
-export type EventsType = {
+const API_KEY = import.meta.env.VITE_GAPI_KEY
+
+export type EventsTypeSchema = {
 	success: true
 	summary: string
 	timeZone: string
 	items: {
 		summary: string
-		description: string
+		description?: string
 		start: {
 			date: string
 		}
@@ -19,7 +21,7 @@ export type EventsType = {
 	error: string
 }
 
-export async function fetchCalendarEvents(id: string): Promise<EventsType> {
+export async function fetchCalendarEvents(id: string): Promise<EventsTypeSchema> {
 	let url = new URL(`https://www.googleapis.com/calendar/v3/calendars/${id}/events`)
 
 	const override = (window as any).DATE_OVERRIDE
@@ -31,16 +33,21 @@ export async function fetchCalendarEvents(id: string): Promise<EventsType> {
 		key: API_KEY,
 		singleEvents: 'true',
 		orderBy: 'startTime',
-		timeMin: override ?? new Date().toISOString(),
+		timeMin: moment(override ?? undefined).toISOString(),
 	})
 
 	url.search = params.toString()
 	console.info(`Fetching Google Calendar events from '${url.toString()}'`)
 
 	try {
-		let response = await (await fetch(url)).json()
-		response.success = true
-		return response
+		const response = await fetch(url)
+		let data = await response.json()
+
+		if (!response.ok)
+			throw new Error(`Google Calendar API returned ${response.status} ${data.error?.message}`)
+
+		data.success = true
+		return data
 	}
 	catch (error) {
 		return {

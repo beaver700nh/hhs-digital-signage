@@ -1,9 +1,11 @@
 import moment from 'moment'
 
-import { lookupConfiguration, type EventsType } from '@/data/api'
+import { lookupConfiguration, type EventsTypeSchema } from '@/data/api'
 import * as Regex from './regex'
 
 export type BellSchedule = {
+	type: 'none'
+} | {
 	type: 'html'
 	data: string
 } | {
@@ -44,7 +46,8 @@ export type NextDaySchedule = {
 	}
 }
 
-export default function parseSchedule(data: EventsType & { success: true }): NextDaySchedule {
+// TODO add rollover after certain time
+export default function parseSchedule(data: EventsTypeSchema & { success: true }): NextDaySchedule {
 	let nextDay: NextDaySchedule = { exists: false }
 	let hiatus = []
 
@@ -53,7 +56,10 @@ export default function parseSchedule(data: EventsType & { success: true }): Nex
 
 	for (const item of data.items) {
 		const letter = item.summary.match(Regex.VALID_DAYS)?.[1]
-		const quirk = item.summary.match(Regex.SPECIAL_DAYS)?.[0]?.toLowerCase()
+		let quirk = item.summary.match(Regex.SPECIAL_DAYS)?.[0]?.toLowerCase()
+
+		if (quirk == null)
+			quirk = item.summary.match(Regex.SPECIAL_FALLBACK)?.[0]?.toLowerCase()
 
 		// Skip if not a school day
 
@@ -94,7 +100,7 @@ export default function parseSchedule(data: EventsType & { success: true }): Nex
 function parseSchoolDay({ letter, quirk, description }: {
 	letter?: string
 	quirk?: string
-	description: string
+	description?: string
 }): (NextDaySchedule & { exists: true })['what'] {
 	const schedule = parseBellSchedule(description)
 
@@ -112,7 +118,7 @@ function parseSchoolDay({ letter, quirk, description }: {
 		quirk === 'last' ? 'Last Day of School' :
 		quirk === 'half' ? 'Half Day' :
 		quirk === '1/2' ? 'Half Day' :
-		'Special Schedule';
+		'Special Schedule'
 	return {
 		type: 'special',
 		letter: letter,
@@ -121,7 +127,13 @@ function parseSchoolDay({ letter, quirk, description }: {
 	}
 }
 
-function parseBellSchedule(description: string): BellSchedule {
+function parseBellSchedule(description: string | undefined): BellSchedule {
+	if (description == null || description.trim().length === 0) {
+		return {
+			type: 'none',
+		}
+	}
+
 	const matches = [...description.matchAll(Regex.SUSPECTED_HTML)]
 
 	try {
@@ -199,7 +211,7 @@ function parseBellScheduleToText(description: string) {
 function parseHiatus({ dayBefore, dayAfter, events }: {
 	dayBefore: moment.Moment
 	dayAfter: moment.Moment
-	events: (EventsType & { success: true })['items']
+	events: (EventsTypeSchema & { success: true })['items']
 }): (NextDaySchedule & { exists: true })['hiatus'] {
 	// Is it Monday or later when we get back?
 	const hiatusLength = dayAfter.diff(dayBefore, 'days')
@@ -215,6 +227,8 @@ function parseHiatus({ dayBefore, dayAfter, events }: {
 		weekend: hiatusLength >= 21 ? 'summer' : crossedWeekend,
 	}
 
+	// TODO bugfixes:
+	// "PD Day - No School" yields "Pd Day - No School" but should be "PD Day"
 	for (const event of events) {
 		// Attempt to clean up name of hiatus event
 		const match = event.summary.match(Regex.NO_SCHOOL)?.[1] ?? event.summary

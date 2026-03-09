@@ -1,14 +1,14 @@
 import { useEffect, useState, useContext, Suspense, type ComponentType } from 'react'
 import moment from 'moment';
 
-import { fetchCalendarEvents, type EventsType } from '@/data/api'
+import { fetchCalendarEvents, type EventsTypeSchema } from '@/data/api'
 import { nextWidget, prevWidget } from './widgets';
 import { ActiveWidgetContext } from '@/Carousel'
 import WidgetLoading from './placeholder/WidgetLoading'
 
 import './WidgetWrapper.css'
 
-export type WidgetRenderer = ComponentType<{ promise: Promise<EventsType> }> & { CAL_ID?: string }
+export type WidgetRenderer = ComponentType<{ promise: Promise<EventsTypeSchema> }> & { CAL_ID?: string }
 
 const REFRESH_INTERVAL = moment.duration(1, 'minute').asMilliseconds()
 
@@ -16,7 +16,7 @@ export default function WidgetWrapper({ index, RendererComponent }: {
 	index: number,
 	RendererComponent: WidgetRenderer,
 }) {
-	const [promise, setPromise] = useState<Promise<EventsType> | null>(null)
+	const [promise, setPromise] = useState<Promise<EventsTypeSchema> | null>(null)
 	const [refreshKey, setRefreshKey] = useState(0)
 
 	useEffect(() => {

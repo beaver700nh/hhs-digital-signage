@@ -1,6 +1,6 @@
 :root {
 	--bg-plain:   hsl( 0, 20%, 96%);
-	--bg-dark:    hsl( 0,  0%, 24%);
+	--bg-dark:    hsl( 0, 20%, 24%);
 	--bg-accent1: hsl( 4, 80%, 32%);
 	--bg-accent2: hsl( 4, 80%, 16%);
 	--fg-plain:   hsl( 0,  0%,  4%);
@@ -24,7 +24,7 @@
 	position: fixed;
 	inset: 0;
 	display: flex;
-	flex-direction: row;
+	flex-flow: row nowrap;
 	justify-content: stretch;
 	align-items: stretch;
 }
