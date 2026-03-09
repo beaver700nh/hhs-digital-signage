@@ -22,7 +22,7 @@ export async function fetchCalendarEvents(id: string) {
 		key: API_KEY,
 		singleEvents: 'true',
 		orderBy: 'startTime',
-		timeMin: (new Date()).toISOString(),
+		timeMin: (new Date("2026-06-24T05:00:00.000Z")).toISOString(),
 	})
 
 	url.search = params.toString()

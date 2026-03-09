@@ -4,8 +4,8 @@ import TestWidget2 from './test2/TestWidget2'
 
 const Widgets = [
 	ScheduleWidget,
-	TestWidget2,
-	PlaceholderWidget,
+	// TestWidget2,
+	// PlaceholderWidget,
 ]
 
 export default Widgets

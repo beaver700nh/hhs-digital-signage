@@ -1,19 +1,16 @@
 import { use, useMemo } from 'react'
 
 import type { WidgetRenderer } from '../WidgetWrapper'
+import parseSchedule from './parser'
 
 const ScheduleWidget: WidgetRenderer = ({ promise }) => {
 	const data = use(promise)
-	const parsed = useMemo(() => {
-		const parsed = JSON.stringify(data.items.map(x => `${x.summary} @ ${x.start.date} - ${x.end.date}`), null, 2);
-		console.log(parsed)
-		return parsed
-	}, [data])
+	const parsed = useMemo(() => parseSchedule(data), [data])
 
 	return (
 		<>
 			<p className="widget one">{data.summary}</p>
-			<pre>{parsed}</pre>
+			<pre>{JSON.stringify(parsed, null, 2)}</pre>
 		</>
 	)
 }
