@@ -49,3 +49,23 @@
 		}
 	}
 }
+
+.bell-sched {
+	margin: 0 1rem;
+	text-align: center;
+	font-size: 150%;
+
+	&.none {
+		text-decoration: underline;
+	}
+
+	&.html {
+		align-self: start;
+		text-align: start;
+		white-space: nowrap;
+	}
+
+	& > * {
+		margin-block: 0 0.5rem;
+	}
+}

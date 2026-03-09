@@ -143,7 +143,7 @@ function parseBellSchedule(description: string | undefined): BellSchedule {
 				data: parseBellScheduleToTable(description),
 			}
 		}
-		else if (lookupConfiguration('disableHtmlSchedule')) {
+		else if (lookupConfiguration('disableHtmlSchedule') == true) {
 			const sanitized = decodePotentialHtml(description)
 			return {
 				type: 'text',
