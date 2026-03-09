@@ -49,3 +49,12 @@ export async function fetchCalendarEvents(id: string): Promise<EventsType> {
 		}
 	}
 }
+
+export interface LocalStorageSchema {
+	disableHtmlSchedule: boolean
+	disableWidgets: number[]
+}
+
+export function lookupConfiguration< K extends keyof LocalStorageSchema >(key: K): LocalStorageSchema[K] | null {
+	return localStorage.getItem(key) as (LocalStorageSchema[K] | null)
+}

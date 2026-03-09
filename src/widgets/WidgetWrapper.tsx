@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext, Suspense, type ComponentType } from 'react'
 import moment from 'moment';
 
-import { fetchCalendarEvents, type EventsType } from '@/google/api'
+import { fetchCalendarEvents, type EventsType } from '@/data/api'
 import { nextWidget, prevWidget } from './widgets';
 import { ActiveWidgetContext } from '@/Carousel'
 import WidgetLoading from './placeholder/WidgetLoading'

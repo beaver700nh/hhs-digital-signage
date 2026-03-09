@@ -12,7 +12,7 @@ const ScheduleWidget: WidgetRenderer = ({ promise }) => {
 		data.success ?
 		<>
 			<p className="widget one">{data.summary}</p>
-			<pre>{JSON.stringify(parsed!, null, 2)}</pre>
+			<pre style={{whiteSpace: 'pre-wrap'}}>{JSON.stringify(parsed!, null, 2)}</pre>
 		</> :
 		<WidgetError message={data.error} />
 	)

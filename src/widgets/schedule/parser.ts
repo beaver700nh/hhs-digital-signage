@@ -1,13 +1,22 @@
 import moment from 'moment'
 
-import type { EventsType } from '@/google/api'
+import { lookupConfiguration, type EventsType } from '@/data/api'
 import * as Regex from './regex'
 
-export type BellSchedule = string[] | {
-	start: string
-	end: string
-	name: string
-}[]
+export type BellSchedule = {
+	type: 'html'
+	data: string
+} | {
+	type: 'text'
+	data: string[]
+} | {
+	type: 'table'
+	data: {
+		start: string
+		end: string
+		name: string
+	}[]
+}
 
 export type NextDaySchedule = {
 	exists: false
@@ -113,62 +122,78 @@ function parseSchoolDay({ letter, quirk, description }: {
 }
 
 function parseBellSchedule(description: string): BellSchedule {
-	const sanitized = decodePotentialHtml(description)
+	const matches = [...description.matchAll(Regex.SUSPECTED_HTML)]
 
 	try {
-		return parseBellScheduleToTable(sanitized)
+		if (matches.length === 0) {
+			return {
+				type: 'table',
+				data: parseBellScheduleToTable(description),
+			}
+		}
+		else if (lookupConfiguration('disableHtmlSchedule')) {
+			const sanitized = decodePotentialHtml(description)
+			return {
+				type: 'text',
+				data: parseBellScheduleToText(sanitized)
+			}
+		}
+		else {
+			return {
+				type: 'html',
+				data: description,
+			}
+		}
 	}
 	catch (error) {
 		console.warn(`Couldn't interpret event description as bell schedule, falling back to plain text: ${(error as any).message}`)
-		return parseBellScheduleToText(sanitized)
+		return {
+			type: 'text',
+			data: parseBellScheduleToText(description),
+		}
 	}
 }
 
 function decodePotentialHtml(description: string) {
-  const matches = [...description.matchAll(Regex.SUSPECTED_HTML)];
+	const doc = new DOMParser().parseFromString(description, 'text/html')
+	const walker = document.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT, null)
 
-  if (matches.length === 0) {
-    return description;
-  }
+	let node
+	let nodes = []
+	while ((node = walker.nextNode()) != null)
+		if (node.nodeValue != null)
+			nodes.push(node.nodeValue)
 
-  const doc = new DOMParser().parseFromString(description, "text/html");
-  const walker = document.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT, null);
-
-  let node;
-  let nodes = [];
-  while ((node = walker.nextNode()) != null)
-    nodes.push(node.nodeValue);
-
-  return nodes.join("\n");
+	return nodes.join('\n')
 }
 
 function parseBellScheduleToTable(description: string) {
-  const matches = [...description.matchAll(Regex.BELL_SCHEDULE)];
+	const matches = [...description.matchAll(Regex.BELL_SCHEDULE)]
 
-  if (matches.length === 0) {
-    throw new Error("Bell schedule format could not be parsed.");
-  }
+	if (matches.length === 0) {
+		throw new Error('Bell schedule format could not be parsed.')
+	}
 
-  return matches.map(match => {
-    if (match.length !== 7)
-      throw new Error(`Failed to detect any information from schedule entry: ${match[0]}`);
+	return matches.map(match => {
+		if (match.length !== 7)
+			throw new Error(`Failed to detect any information from schedule entry: ${match[0]}`)
 
-    const [, startA, endA, nameA, nameB, startB, endB] = match;
+		const [, startA, endA, nameA, nameB, startB, endB] = match
 
-    if (nameA != null)
-      return { name: nameA, start: startA, end: endA };
-    else if (nameB != null)
-      return { name: nameB, start: startB, end: endB };
-    else
-      throw new Error(`Failed to detect class name from schedule entry: ${match}`);
-  });
+		if (nameA != null)
+			return { name: nameA, start: startA, end: endA }
+		else if (nameB != null)
+			return { name: nameB, start: startB, end: endB }
+		else
+			throw new Error(`Failed to detect class name from schedule entry: ${match}`)
+	})
 }
 
 function parseBellScheduleToText(description: string) {
-  return description
-    .split("\n")
-    .map(line => line.trim())
-    .filter(line => line.length > 0);
+	return description
+		.split('\n')
+		.map(line => line.replace(/\s+/g, ' ').trim())
+		.filter(line => line.length > 0)
 }
 
 function parseHiatus({ dayBefore, dayAfter, events }: {
