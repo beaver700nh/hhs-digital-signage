@@ -46,7 +46,6 @@ export type NextDaySchedule = {
 	}
 }
 
-// TODO add rollover after certain time
 export default function parseSchedule(data: EventsTypeSchema & { success: true }): NextDaySchedule {
 	let nextDay: NextDaySchedule = { exists: false }
 	let hiatus = []

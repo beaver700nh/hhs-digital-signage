@@ -33,7 +33,8 @@ export async function fetchCalendarEvents(id: string): Promise<EventsTypeSchema>
 		key: API_KEY,
 		singleEvents: 'true',
 		orderBy: 'startTime',
-		timeMin: moment(override ?? undefined).toISOString(),
+		// Begin querying the next day at 4pm (16:00 + 8h = midnight)
+		timeMin: moment(override ?? undefined).add(8, 'hours').toISOString(),
 	})
 
 	url.search = params.toString()
