@@ -3,13 +3,11 @@ import moment from 'moment'
 import type { EventsType } from '@/google/api'
 import * as Regex from './regex'
 
-export type BellSchedule = (
-	{
-		start: string
-		end: string
-		name: string
-	} | string
-)[]
+export type BellSchedule = string[] | {
+	start: string
+	end: string
+	name: string
+}[]
 
 export type NextDaySchedule = {
 	exists: false
@@ -20,13 +18,13 @@ export type NextDaySchedule = {
 		// e.g. 'A Day'
 		type: 'normal'
 		letter: string
-		description: BellSchedule
+		schedule: BellSchedule
 	} | {
 		// e.g. 'D Day - Transition Day' or 'Half Day'
 		type: 'special'
 		letter?: string
 		quirk: string
-		description: BellSchedule
+		schedule: BellSchedule
 	}
 	hiatus?: {
 		// e.g. false, ['PD Day']
@@ -63,7 +61,7 @@ export default function parseSchedule(data: EventsType & { success: true }): Nex
 			nextDay = {
 				exists: true,
 				when: moment(item.start.date),
-				what: parseSchoolDay({ letter, quirk }),
+				what: parseSchoolDay({ letter, quirk, description: item.description }),
 			}
 
 			// Go back and check if we will go on hiatus right after
@@ -84,16 +82,18 @@ export default function parseSchedule(data: EventsType & { success: true }): Nex
 	return nextDay
 }
 
-// TODO description
-function parseSchoolDay({ letter, quirk }: {
+function parseSchoolDay({ letter, quirk, description }: {
 	letter?: string
 	quirk?: string
+	description: string
 }): (NextDaySchedule & { exists: true })['what'] {
+	const schedule = parseBellSchedule(description)
+
 	if (quirk == null) {
 		return {
 			type: 'normal',
 			letter: letter!, // letter is guaranteed to be defined if quirk is not
-			description: [],
+			schedule,
 		}
 	}
 
@@ -108,8 +108,67 @@ function parseSchoolDay({ letter, quirk }: {
 		type: 'special',
 		letter: letter,
 		quirk: whyQuirk,
-		description: [],
+		schedule,
 	}
+}
+
+function parseBellSchedule(description: string): BellSchedule {
+	const sanitized = decodePotentialHtml(description)
+
+	try {
+		return parseBellScheduleToTable(sanitized)
+	}
+	catch (error) {
+		console.warn(`Couldn't interpret event description as bell schedule, falling back to plain text: ${(error as any).message}`)
+		return parseBellScheduleToText(sanitized)
+	}
+}
+
+function decodePotentialHtml(description: string) {
+  const matches = [...description.matchAll(Regex.SUSPECTED_HTML)];
+
+  if (matches.length === 0) {
+    return description;
+  }
+
+  const doc = new DOMParser().parseFromString(description, "text/html");
+  const walker = document.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT, null);
+
+  let node;
+  let nodes = [];
+  while ((node = walker.nextNode()) != null)
+    nodes.push(node.nodeValue);
+
+  return nodes.join("\n");
+}
+
+function parseBellScheduleToTable(description: string) {
+  const matches = [...description.matchAll(Regex.BELL_SCHEDULE)];
+
+  if (matches.length === 0) {
+    throw new Error("Bell schedule format could not be parsed.");
+  }
+
+  return matches.map(match => {
+    if (match.length !== 7)
+      throw new Error(`Failed to detect any information from schedule entry: ${match[0]}`);
+
+    const [, startA, endA, nameA, nameB, startB, endB] = match;
+
+    if (nameA != null)
+      return { name: nameA, start: startA, end: endA };
+    else if (nameB != null)
+      return { name: nameB, start: startB, end: endB };
+    else
+      throw new Error(`Failed to detect class name from schedule entry: ${match}`);
+  });
+}
+
+function parseBellScheduleToText(description: string) {
+  return description
+    .split("\n")
+    .map(line => line.trim())
+    .filter(line => line.length > 0);
 }
 
 function parseHiatus({ dayBefore, dayAfter, events }: {

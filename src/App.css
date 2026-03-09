@@ -10,6 +10,7 @@
 	& > * {
 		margin: 0.75rem;
 		border-radius: 1rem;
+		background-color: var(--bg-plain);
 		box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 75%);
 	}
 }

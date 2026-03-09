@@ -17,6 +17,7 @@ export default function WidgetWrapper({ index, RendererComponent }: {
 	RendererComponent: WidgetRenderer,
 }) {
 	const [promise, setPromise] = useState<Promise<EventsType> | null>(null)
+	const [refreshKey, setRefreshKey] = useState(0)
 
 	useEffect(() => {
 		const interval = setInterval((function iife() {
@@ -27,7 +28,7 @@ export default function WidgetWrapper({ index, RendererComponent }: {
 		})(), REFRESH_INTERVAL)
 
 		return () => clearInterval(interval)
-	}, [RendererComponent.CAL_ID])
+	}, [RendererComponent.CAL_ID, refreshKey])
 
 	const activeWidget = useContext(ActiveWidgetContext)
 	const animationState =
@@ -37,7 +38,10 @@ export default function WidgetWrapper({ index, RendererComponent }: {
 		'unloaded'
 
 	return (
-		<section className={`carousel-widget ${animationState}`}>
+		<section
+			className={`carousel-widget ${animationState}`}
+			onClick={() => setRefreshKey(Math.random())}
+		>
 			<Suspense fallback={<WidgetLoading />}>
 				<RendererComponent promise={promise ?? new Promise(() => {})} />
 			</Suspense>

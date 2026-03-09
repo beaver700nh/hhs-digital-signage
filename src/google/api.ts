@@ -22,11 +22,16 @@ export type EventsType = {
 export async function fetchCalendarEvents(id: string): Promise<EventsType> {
 	let url = new URL(`https://www.googleapis.com/calendar/v3/calendars/${id}/events`)
 
+	const override = (window as any).DATE_OVERRIDE
+
+	if (override != null)
+		console.warn(`Using date override ${override} for Google Calendar API requests`)
+
 	let params = new URLSearchParams({
 		key: API_KEY,
 		singleEvents: 'true',
 		orderBy: 'startTime',
-		timeMin: (new Date("2026-06-12T04:00:00.000Z")).toISOString(),
+		timeMin: override ?? new Date().toISOString(),
 	})
 
 	url.search = params.toString()
