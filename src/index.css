@@ -1,5 +1,6 @@
 :root {
 	--bg-plain:   hsl( 0, 20%, 96%);
+	--bg-dark:    hsl( 0,  0%, 24%);
 	--bg-accent1: hsl( 4, 80%, 32%);
 	--bg-accent2: hsl( 4, 80%, 16%);
 	--fg-plain:   hsl( 0,  0%,  4%);
@@ -9,9 +10,10 @@
 	--font-title: Lato, Tahoma, sans-serif;
 	--font-body: "Roboto Condensed", Helvetica, Arial, sans-serif;
 
-	font-family: var(--font-body);
 	color: var(--fg-plain);
 	background-color: var(--bg-plain);
+	font-size: 125%;
+	font-family: var(--font-body);
 
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;

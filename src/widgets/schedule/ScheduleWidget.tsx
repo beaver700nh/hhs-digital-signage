@@ -2,16 +2,19 @@ import { use, useMemo } from 'react'
 
 import type { WidgetRenderer } from '../WidgetWrapper'
 import parseSchedule from './parser'
+import WidgetError from '../placeholder/WidgetError'
 
 const ScheduleWidget: WidgetRenderer = ({ promise }) => {
 	const data = use(promise)
-	const parsed = useMemo(() => parseSchedule(data), [data])
+	const parsed = useMemo(() => data.success ? parseSchedule(data) : null, [data])
 
 	return (
+		data.success ?
 		<>
 			<p className="widget one">{data.summary}</p>
-			<pre>{JSON.stringify(parsed, null, 2)}</pre>
-		</>
+			<pre>{JSON.stringify(parsed!, null, 2)}</pre>
+		</> :
+		<WidgetError message={data.error} />
 	)
 }
 

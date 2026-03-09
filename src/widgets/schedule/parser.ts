@@ -37,83 +37,55 @@ export type NextDaySchedule = {
 	}
 }
 
-// TODO handle case where the initial request itself fails
-export default function parseSchedule(data: EventsType): NextDaySchedule {
+export default function parseSchedule(data: EventsType & { success: true }): NextDaySchedule {
 	let nextDay: NextDaySchedule = { exists: false }
 	let hiatus = []
 
 	// We need to find the first day of school in the list
 	// We will also check if it's the last day before a hiatus
 
-	console.log(data.items)
-
 	for (const item of data.items) {
 		const letter = item.summary.match(Regex.VALID_DAYS)?.[1]
 		const quirk = item.summary.match(Regex.SPECIAL_DAYS)?.[0]?.toLowerCase()
 
-		// console.log(`item ${item.summary} letter ${letter} quirk ${quirk}`)
+		// Skip if not a school day
+
 		if (letter == null && quirk == null) {
 			// We only save hiatus info after we've already found a school day
 			nextDay.exists && hiatus.push(item)
 			continue
 		}
 
-		// If we got to this point that means this is a school day
+		// Didn't skip, so it is a school day
 
+		// If we haven't found a school day yet then we've found the first one
 		if (!nextDay.exists) {
-			// This is the first school day - parse it!
 			nextDay = {
 				exists: true,
 				when: moment(item.start.date),
-				what: parseLetter({ letter, quirk }),
+				what: parseSchoolDay({ letter, quirk }),
 			}
 
 			// Go back and check if we will go on hiatus right after
 			continue
 		}
 
-		// This the end of the potential hiatus - parse it if there was one
-		nextDay.hiatus = {
-			names: [],
-			weekend: false,
-		}
+		// This is the second school day we've found
+		// There was potentially a hiatus between the first and second day
+		nextDay.hiatus = parseHiatus({
+			dayBefore: nextDay.when,
+			dayAfter: moment(item.start.date),
+			events: hiatus,
+		})
 
-		for (const event of hiatus) {
-			const match = event.summary.match(Regex.NO_SCHOOL)?.[1] ?? event.summary
-			const name = (match.match(Regex.VACATION)?.[1] ?? match)
-				.trim()
-				.replace(/\s{2,}/g, ' ')
-				.toLocaleLowerCase()
-				.split(' ')
-				.map(word =>
-					word.length === 0 ? "" :
-					word.charAt(0).toUpperCase() + word.slice(1)
-				)
-				.join(' ')
-
-			nextDay.hiatus.names.push(name)
-		}
-
-		// We know it crossed the weekend if it takes us to next Monday or later
-		const hiatusLength = moment(item.start.date).diff(nextDay.when, 'days')
-		nextDay.hiatus.weekend = (nextDay.when.isoWeekday() + hiatusLength) >= 8
-
-		if (hiatusLength >= 21)
-			nextDay.hiatus.weekend = 'summer'
-
-		// If it didn't and there weren't even any days off, this was not a hiatus
-		if (!nextDay.hiatus.weekend && nextDay.hiatus.names.length === 0) {
-			nextDay.hiatus = undefined
-		}
-
-		break;
+		break
 	}
 
-	return nextDay;
+	return nextDay
 }
 
 // TODO description
-function parseLetter({ letter, quirk }: {
+function parseSchoolDay({ letter, quirk }: {
 	letter?: string
 	quirk?: string
 }): (NextDaySchedule & { exists: true })['what'] {
@@ -138,4 +110,43 @@ function parseLetter({ letter, quirk }: {
 		quirk: whyQuirk,
 		description: [],
 	}
+}
+
+function parseHiatus({ dayBefore, dayAfter, events }: {
+	dayBefore: moment.Moment
+	dayAfter: moment.Moment
+	events: (EventsType & { success: true })['items']
+}): (NextDaySchedule & { exists: true })['hiatus'] {
+	// Is it Monday or later when we get back?
+	const hiatusLength = dayAfter.diff(dayBefore, 'days')
+	const crossedWeekend = (dayBefore.isoWeekday() + hiatusLength) >= 8
+
+	if (!crossedWeekend && !events.length) {
+		// We didn't event have a hiatus
+		return undefined
+	}
+
+	let hiatus: (NextDaySchedule & { exists: true })['hiatus'] = {
+		names: [],
+		weekend: hiatusLength >= 21 ? 'summer' : crossedWeekend,
+	}
+
+	for (const event of events) {
+		// Attempt to clean up name of hiatus event
+		const match = event.summary.match(Regex.NO_SCHOOL)?.[1] ?? event.summary
+		const name = (match.match(Regex.VACATION)?.[1] ?? match)
+			.trim()
+			.toLocaleLowerCase()
+			.split(/\s+/g)
+			.map(word =>
+				// word.length should never be zero
+				word.length === 0 ? "" :
+				word.charAt(0).toUpperCase() + word.slice(1)
+			)
+			.join(' ')
+
+		hiatus.names.push(name)
+	}
+
+	return hiatus
 }

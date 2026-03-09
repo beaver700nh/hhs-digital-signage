@@ -1,0 +1,33 @@
+.carousel-widget > .error {
+	margin: auto 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 1rem;
+	padding: 2rem;
+	color: var(--bg-plain);
+	background-color: var(--bg-dark);
+	border: 0.25rem solid var(--fg-accent2);
+	border-radius: 1rem;
+	box-shadow: 0 0 2rem black;
+
+	& > * {
+		margin: 0;
+	}
+
+	&::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: repeating-linear-gradient(
+			-45deg,
+			var(--bg-dark),
+			var(--bg-dark) 12px,
+			var(--fg-accent2) 12px,
+			var(--fg-accent2) 14px
+		);
+		opacity: 0.5;
+	}
+}

@@ -4,7 +4,7 @@ import moment from 'moment';
 import { fetchCalendarEvents, type EventsType } from '@/google/api'
 import { nextWidget, prevWidget } from './widgets';
 import { ActiveWidgetContext } from '@/Carousel'
-import LoadingWidget from './LoadingWidget'
+import WidgetLoading from './placeholder/WidgetLoading'
 
 import './WidgetWrapper.css'
 
@@ -38,7 +38,7 @@ export default function WidgetWrapper({ index, RendererComponent }: {
 
 	return (
 		<section className={`carousel-widget ${animationState}`}>
-			<Suspense fallback={<LoadingWidget />}>
+			<Suspense fallback={<WidgetLoading />}>
 				<RendererComponent promise={promise ?? new Promise(() => {})} />
 			</Suspense>
 		</section>

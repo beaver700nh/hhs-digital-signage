@@ -17,7 +17,7 @@ export default function Carousel() {
 	useEffect(() => {
 		const interval = setInterval(() => setActiveWidget(nextWidget), REFRESH_INTERVAL)
 		return () => clearInterval(interval)
-	}, [REFRESH_INTERVAL])
+	}, [REFRESH_INTERVAL, Widgets])
 
 	return (
 		<article id="carousel">
