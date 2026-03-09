@@ -10,7 +10,7 @@ import './WidgetWrapper.css'
 
 export type WidgetRenderer = ComponentType<{ promise: Promise<EventsTypeSchema> }> & { CAL_ID?: string }
 
-const REFRESH_INTERVAL = moment.duration(1, 'minute').asMilliseconds()
+const REFRESH_INTERVAL = moment.duration(5, 'minute').asMilliseconds()
 
 export default function WidgetWrapper({ index, RendererComponent }: {
 	index: number,

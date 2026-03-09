@@ -7,7 +7,7 @@ import Widgets, { nextWidget } from './widgets/widgets'
 
 import './Carousel.css'
 
-const REFRESH_INTERVAL = moment.duration(2, 'seconds').asMilliseconds() // Temporarily really fast
+const REFRESH_INTERVAL = moment.duration(10, 'seconds').asMilliseconds()
 
 export const ActiveWidgetContext = createContext(0)
 
@@ -20,7 +20,13 @@ export default function Carousel() {
 	}, [REFRESH_INTERVAL, Widgets])
 
 	return (
-		<article id="carousel">
+		<article
+			id="carousel"
+			onContextMenu={e => {
+				setActiveWidget(nextWidget)
+				e.preventDefault()
+			}}
+		>
 			<ActiveWidgetContext.Provider value={activeWidget}>
 				{Widgets.map((Widget, index) => <WidgetWrapper
 					key={index}
