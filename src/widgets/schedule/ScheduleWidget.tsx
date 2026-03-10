@@ -13,7 +13,6 @@ import './ScheduleWidget.css'
 const ScheduleWidget: WidgetRenderer = ({ promise }) => {
 	const data = use(promise)
 	const parsed = useMemo(() => data.success ? parseSchedule(data) : null, [data])
-	console.log(parsed)
 
 	return (
 		!data.success ?
