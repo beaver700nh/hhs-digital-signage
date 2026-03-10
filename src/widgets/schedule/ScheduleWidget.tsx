@@ -6,6 +6,7 @@ import WidgetError from '../placeholder/WidgetError'
 import Letter from './Letter'
 import Headlines from './Headlines'
 import BellSchedule from './BellSchedule'
+import Hiatus from './Hiatus'
 
 import './ScheduleWidget.css'
 
@@ -26,6 +27,7 @@ const ScheduleWidget: WidgetRenderer = ({ promise }) => {
 					<Headlines when={parsed!.when} what={parsed!.what} />
 				</div>
 				<BellSchedule what={parsed!.what} />
+				<Hiatus hiatus={parsed!.hiatus} />
 			</>
 	)
 }

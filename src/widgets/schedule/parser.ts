@@ -226,11 +226,9 @@ function parseHiatus({ dayBefore, dayAfter, events }: {
 		weekend: hiatusLength >= 21 ? 'summer' : crossedWeekend,
 	}
 
-	// TODO bugfixes:
-	// "PD Day - No School" yields "Pd Day - No School" but should be "PD Day"
 	for (const event of events) {
 		// Attempt to clean up name of hiatus event
-		const match = event.summary.match(Regex.NO_SCHOOL)?.[1] ?? event.summary
+		const match = event.summary.replace(Regex.NO_SCHOOL, '')
 		const name = (match.match(Regex.VACATION)?.[1] ?? match)
 			.trim()
 			.toLocaleLowerCase()
@@ -242,8 +240,12 @@ function parseHiatus({ dayBefore, dayAfter, events }: {
 			)
 			.join(' ')
 
-		hiatus.names.push(name)
+		// Normalize spelling and capitalization of PD Day
+		hiatus.names.push(name.match(Regex.PD_DAY) ? 'PD Day' : name)
 	}
+
+	// Remove duplicates, e.g. December Vacation, Christmas, December Vacation again
+	hiatus.names = [...new Set(hiatus.names)]
 
 	return hiatus
 }

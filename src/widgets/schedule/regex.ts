@@ -13,8 +13,9 @@ export const VALID_DAYS = /^\s*(?:(?:[Ee]xams?|[Tt]ransition)?(?:\s*[Dd]ay)?)?\W
  */
 export const SPECIAL_DAYS = /(exam)|(transition)|(last)|(half|1\/2)/gi
 export const SPECIAL_FALLBACK = /\*|special|schedule/gi
-export const NO_SCHOOL = /^\s*no\s+school\s*(?:-\s*)?(.*)\s*$/i
+export const NO_SCHOOL = /(?:-\s*)?\s*no\s+school\s*(?:-\s*)?/gi
 export const VACATION = /\b(\w+\s+(?:break|vacation))/gi
+export const PD_DAY = /\b(?:pd|professional(?:\s+development)?)\s+(?:day)?\b/gi
 
 /**
  * Rudimentary detector for HTML in calendar event description (e.g. if it was copy-pasted from somewhere).
