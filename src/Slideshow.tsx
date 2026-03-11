@@ -17,11 +17,13 @@ export default function Slideshow() {
 
   return (
 		<article id="slideshow">
-      <iframe
-        key={refreshKey}
-        allowFullScreen={true}
-        src={`${SLIDESHOW_URL}?start=true&loop=true&delayms=8000&rm=minimal`}
-      ></iframe>
+			<div className="wrapper">
+				<iframe
+					key={refreshKey}
+					allowFullScreen={true}
+					src={`${SLIDESHOW_URL}?start=true&loop=true&delayms=8000&rm=minimal`}
+				/>
+			</div>
 		</article>
   )
 }

@@ -19,12 +19,3 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
-
-#root {
-	position: fixed;
-	inset: 0;
-	display: flex;
-	flex-flow: row nowrap;
-	justify-content: stretch;
-	align-items: stretch;
-}
