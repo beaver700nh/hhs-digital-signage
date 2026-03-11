@@ -29,6 +29,9 @@ export async function fetchCalendarEvents(id: string): Promise<EventsTypeSchema>
 	if (override != null)
 		console.warn(`Using date override ${override} for Google Calendar API requests`)
 
+	// Debug: Makes it load forever
+	// return new Promise(() => {})
+
 	let params = new URLSearchParams({
 		key: API_KEY,
 		singleEvents: 'true',

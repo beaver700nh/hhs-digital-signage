@@ -9,7 +9,7 @@ import './Carousel.css'
 
 const REFRESH_INTERVAL = moment.duration(10, 'seconds').asMilliseconds()
 
-export const ActiveWidgetContext = createContext(0)
+export const ActiveWidgetContext = createContext(-1)
 
 export default function Carousel() {
 	const [activeWidget, setActiveWidget] = useState(0)

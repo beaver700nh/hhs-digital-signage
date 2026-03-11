@@ -3,6 +3,17 @@ import moment from 'moment'
 import { lookupConfiguration, type EventsTypeSchema } from '@/data/api'
 import * as Regex from './regex'
 
+export type ScheduleHeader = {
+	// e.g. 'A Day'
+	type: 'normal'
+	letter: string
+} | {
+	// e.g. 'D Day - Transition Day' or 'Half Day'
+	type: 'special'
+	letter?: string
+	quirk: string
+}
+
 export type BellSchedule = {
 	type: 'none'
 } | {
@@ -25,18 +36,8 @@ export type NextDaySchedule = {
 } | {
 	exists: true
 	when: moment.Moment
-	what: {
-		// e.g. 'A Day'
-		type: 'normal'
-		letter: string
-		schedule: BellSchedule
-	} | {
-		// e.g. 'D Day - Transition Day' or 'Half Day'
-		type: 'special'
-		letter?: string
-		quirk: string
-		schedule: BellSchedule
-	}
+	header: ScheduleHeader
+	schedule: BellSchedule
 	hiatus?: {
 		// e.g. false, ['PD Day']
 		// e.g. true, []
@@ -75,7 +76,8 @@ export default function parseSchedule(data: EventsTypeSchema & { success: true }
 			nextDay = {
 				exists: true,
 				when: moment(item.start.date),
-				what: parseSchoolDay({ letter, quirk, description: item.description }),
+				header: parseSchoolDay({ letter, quirk }),
+				schedule: parseBellSchedule(item.description),
 			}
 
 			// Go back and check if we will go on hiatus right after
@@ -96,18 +98,14 @@ export default function parseSchedule(data: EventsTypeSchema & { success: true }
 	return nextDay
 }
 
-function parseSchoolDay({ letter, quirk, description }: {
+function parseSchoolDay({ letter, quirk }: {
 	letter?: string
 	quirk?: string
-	description?: string
-}): (NextDaySchedule & { exists: true })['what'] {
-	const schedule = parseBellSchedule(description)
-
+}): (NextDaySchedule & { exists: true })['header'] {
 	if (quirk == null) {
 		return {
 			type: 'normal',
 			letter: letter!, // letter is guaranteed to be defined if quirk is not
-			schedule,
 		}
 	}
 
@@ -122,7 +120,6 @@ function parseSchoolDay({ letter, quirk, description }: {
 		type: 'special',
 		letter: letter,
 		quirk: whyQuirk,
-		schedule,
 	}
 }
 

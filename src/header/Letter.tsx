@@ -1,7 +1,7 @@
-import type { NextDaySchedule } from "./parser"
+import type { NextDaySchedule } from "@/widgets/schedule/parser"
 
-export default function Letter({ what }:
-	Pick<NextDaySchedule & { exists: true }, 'what'>
+export default function Letter({ header }:
+	Pick<NextDaySchedule & { exists: true }, 'header'>
 ) {
 	return (
 		<svg viewBox="0 0 18 18" className="letter-box">
@@ -13,7 +13,7 @@ export default function Letter({ what }:
 				fill="currentColor"
 				className="letter"
 			>
-				{what.letter ?? "?"}
+				{header.letter ?? "?"}
 			</text>
 			<text
 				x="100%" y="0%"
@@ -23,7 +23,7 @@ export default function Letter({ what }:
 				fill="currentColor"
 				className="letter-star"
 			>
-				{what.type === 'special' ? <>&#x2605;</> : null}
+				{header.type === 'special' ? <>&#x2605;</> : null}
 			</text>
 		</svg>
 	)

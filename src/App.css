@@ -2,7 +2,7 @@
 	position: fixed;
 	inset: 0;
 	display: grid;
-	grid-template-rows: 30vh minmax(0, 1fr);
+	grid-template-rows: max-content minmax(0, 1fr);
 	grid-template-columns: minmax(0, 1fr) max-content;
 	grid-auto-flow: column;
 	place-items: stretch;

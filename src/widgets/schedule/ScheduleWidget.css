@@ -1,59 +1,16 @@
-.schedule-header {
-	box-sizing: border-box;
-	width: 100%;
-	display: inline-flex;
-	flex-flow: row;
-	justify-content: start;
-	align-items: stretch;
-	gap: 1rem;
-	padding-inline: 1rem;
-	margin-block: 1rem;
-	font-family: var(--font-title);
-
-	.letter-box {
-		margin: auto 0;
-		height: 15vh;
-		aspect-ratio: 1/1;
-		font-weight: 900;
-	}
-
-	.letter {
-		color: var(--fg-accent1);
-	}
-
-	.letter-star {
-		color: var(--fg-accent2);
-	}
-
-	.headlines {
-		display: flex;
-		flex-flow: column-reverse nowrap;
-		justify-content: center;
-		align-items: start;
-		margin-block: 1rem;
-		font-size: 180%;
-		gap: 0.5rem;
-
-		.quirk {
-			color: var(--fg-accent2);
-			font-weight: 700;
-			font-style: italic;
-		}
-
-		.humanDate {
-			font-size: 125%;
-		}
-
-		.fullDate {
-			font-size: 80%;
-		}
-	}
-}
-
 .bell-sched {
 	margin: 0 1rem;
 	text-align: center;
 	font-size: 150%;
+
+	.title {
+		font-size: 120%;
+		color: var(--fg-accent1);
+
+		* {
+			padding-block-end: 1rem;
+		}
+	}
 
 	&.none {
 		text-decoration: underline;
@@ -79,7 +36,7 @@
 			& > :first-child {
 				text-align: end;
 				padding-inline-end: 2rem;
-				border-inline-end: 0.15rem solid var(--fg-accent1);
+				border-inline-end: 0.15rem solid var(--bg-accent2);
 			}
 			& > :last-child {
 				text-align: start;
@@ -104,7 +61,6 @@
 .hiatus {
 	display: flex;
 	flex-flow: column nowrap;
-	margin-block: 1rem;
 	gap: 0.5rem;
 	font-size: 150%;
 

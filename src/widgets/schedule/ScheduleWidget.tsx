@@ -3,8 +3,6 @@ import { use, useMemo } from 'react'
 import type { WidgetRenderer } from '../WidgetWrapper'
 import parseSchedule from './parser'
 import WidgetError from '../placeholder/WidgetError'
-import Letter from './Letter'
-import Headlines from './Headlines'
 import BellSchedule from './BellSchedule'
 import Hiatus from './Hiatus'
 
@@ -21,11 +19,7 @@ const ScheduleWidget: WidgetRenderer = ({ promise }) => {
 			<WidgetError message="No schedule information found." /> :
 		/* success */
 			<>
-				<div className="schedule-header">
-					<Letter what={parsed!.what} />
-					<Headlines when={parsed!.when} what={parsed!.what} />
-				</div>
-				<BellSchedule what={parsed!.what} />
+				<BellSchedule schedule={parsed!.schedule} />
 				<Hiatus hiatus={parsed!.hiatus} />
 			</>
 	)

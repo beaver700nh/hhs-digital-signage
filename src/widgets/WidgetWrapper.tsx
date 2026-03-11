@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext, Suspense, type ComponentType } from 'react'
-import moment from 'moment';
+import moment from 'moment'
 
 import { fetchCalendarEvents, type EventsTypeSchema } from '@/data/api'
 import { nextWidget, prevWidget } from './widgets';

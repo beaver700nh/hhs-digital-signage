@@ -1,4 +1,4 @@
-.carousel-widget {
+#carousel > .carousel-widget {
 	position: absolute;
 	inset: 0;
 	overflow: hidden;
@@ -6,7 +6,8 @@
 	flex-flow: column nowrap;
 	justify-content: start;
 	align-items: center;
-	gap: 1rem;
+	padding-block: 2rem;
+	gap: 2rem;
 
 	transition:
 		opacity 0.5s ease-out,

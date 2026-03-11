@@ -1,29 +1,34 @@
 import * as Regex from './regex'
 import type { NextDaySchedule } from "./parser"
 
-export default function BellSchedule({ what }:
-	Pick<NextDaySchedule & { exists: true }, 'what'>
+export default function BellSchedule({ schedule }:
+	Pick<NextDaySchedule & { exists: true }, 'schedule'>
 ) {
-	switch (what.schedule.type) {
+	switch (schedule.type) {
 	case 'none':
 		return (
 			<p className="bell-sched none">No bell schedule listed.</p>
 		)
 	case 'html':
 		return (
-			<div className="bell-sched html" dangerouslySetInnerHTML={{ __html: what.schedule.data }} />
+			<div className="bell-sched html" dangerouslySetInnerHTML={{ __html: schedule.data }} />
 		)
 	case 'text':
 		return (
 			<div className="bell-sched text">
-				{what.schedule.data.map((line, i) => <p key={i}>{line}</p>)}
+				{schedule.data.map((line, i) => <p key={i}>{line}</p>)}
 			</div>
 		)
 	case 'table':
 		return (
 			<table className="bell-sched table">
+				<thead className="title">
+					<tr>
+						<th colSpan={2}>Bell Schedule:</th>
+					</tr>
+				</thead>
 				<tbody>
-					{what.schedule.data.map((line, index) =>
+					{schedule.data.map((line, index) =>
 						<tr
 							key={index}
 							className='line'
