@@ -1,9 +1,7 @@
 import * as Regex from './regex'
-import type { NextDaySchedule } from "./parser"
+import type { BellSchedule } from "./parser"
 
-export default function BellSchedule({ schedule }:
-	Pick<NextDaySchedule & { exists: true }, 'schedule'>
-) {
+export default function BellSchedule({ schedule }: { schedule: BellSchedule }) {
 	switch (schedule.type) {
 	case 'none':
 		return (

@@ -32,12 +32,9 @@ export type BellSchedule = {
 }
 
 export type NextDaySchedule = {
-	exists: false
-} | {
-	exists: true
 	when: moment.Moment
 	header: ScheduleHeader
-	schedule: BellSchedule
+	schedule?: BellSchedule
 	hiatus?: {
 		// e.g. false, ['PD Day']
 		// e.g. true, []
@@ -47,8 +44,13 @@ export type NextDaySchedule = {
 	}
 }
 
-export default function parseSchedule(data: EventsTypeSchema & { success: true }): NextDaySchedule {
-	let nextDay: NextDaySchedule = { exists: false }
+
+export default function parseSchedule(
+	data: EventsTypeSchema & { success: true },
+	verbose: boolean = false,
+):
+	NextDaySchedule | null {
+	let nextDay: NextDaySchedule | null = null
 	let hiatus = []
 
 	// We need to find the first day of school in the list
@@ -65,29 +67,32 @@ export default function parseSchedule(data: EventsTypeSchema & { success: true }
 
 		if (letter == null && quirk == null) {
 			// We only save hiatus info after we've already found a school day
-			nextDay.exists && hiatus.push(item)
+			nextDay != null && hiatus.push(item)
 			continue
 		}
 
 		// Didn't skip, so it is a school day
 
 		// If we haven't found a school day yet then we've found the first one
-		if (!nextDay.exists) {
+		if (nextDay == null) {
 			nextDay = {
-				exists: true,
 				when: moment(item.start.date),
 				header: parseSchoolDay({ letter, quirk }),
-				schedule: parseBellSchedule(item.description),
-			}
+				schedule: verbose ?
+					parseBellSchedule(item.description) : null,
+			} as NextDaySchedule
 
 			// Go back and check if we will go on hiatus right after
-			continue
+			if (verbose)
+				continue
+			else
+				break
 		}
 
 		// This is the second school day we've found
 		// There was potentially a hiatus between the first and second day
 		nextDay.hiatus = parseHiatus({
-			dayBefore: nextDay.when,
+			dayBefore: nextDay.when!,
 			dayAfter: moment(item.start.date),
 			events: hiatus,
 		})
@@ -101,7 +106,7 @@ export default function parseSchedule(data: EventsTypeSchema & { success: true }
 function parseSchoolDay({ letter, quirk }: {
 	letter?: string
 	quirk?: string
-}): (NextDaySchedule & { exists: true })['header'] {
+}): NextDaySchedule['header'] {
 	if (quirk == null) {
 		return {
 			type: 'normal',
@@ -208,7 +213,7 @@ function parseHiatus({ dayBefore, dayAfter, events }: {
 	dayBefore: moment.Moment
 	dayAfter: moment.Moment
 	events: (EventsTypeSchema & { success: true })['items']
-}): (NextDaySchedule & { exists: true })['hiatus'] {
+}): NextDaySchedule['hiatus'] {
 	// Is it Monday or later when we get back?
 	const hiatusLength = dayAfter.diff(dayBefore, 'days')
 	const crossedWeekend = (dayBefore.isoWeekday() + hiatusLength) >= 8
@@ -218,7 +223,7 @@ function parseHiatus({ dayBefore, dayAfter, events }: {
 		return undefined
 	}
 
-	let hiatus: (NextDaySchedule & { exists: true })['hiatus'] = {
+	let hiatus: NextDaySchedule['hiatus'] = {
 		names: [],
 		weekend: hiatusLength >= 21 ? 'summer' : crossedWeekend,
 	}

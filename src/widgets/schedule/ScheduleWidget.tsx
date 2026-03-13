@@ -10,18 +10,15 @@ import './ScheduleWidget.css'
 
 const ScheduleWidget: WidgetRenderer = ({ promise }) => {
 	const data = use(promise)
-	const parsed = useMemo(() => data.success ? parseSchedule(data) : null, [data])
+	const parsed = useMemo(() => data.success ? parseSchedule(data, true) : null, [data])
 
 	return (
-		!data.success ?
-			<WidgetError message={data.error} /> :
-		!parsed!.exists ?
-			<WidgetError message="No schedule information found." /> :
-		/* success */
-			<>
-				<BellSchedule schedule={parsed!.schedule} />
-				<Hiatus hiatus={parsed!.hiatus} />
-			</>
+		parsed == null ?
+			<WidgetError message={(data as any).error ?? "No schedule information found."} /> :
+		<>
+			<BellSchedule schedule={parsed!.schedule!} />
+			<Hiatus hiatus={parsed!.hiatus} />
+		</>
 	)
 }
 

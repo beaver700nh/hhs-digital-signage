@@ -11,9 +11,7 @@ import Letter from './Letter'
 
 import './Header.css'
 
-// TODO minimize duplication with WidgetWrapper and try to avoid duplicate parsing
-
-const REFRESH_INTERVAL = moment.duration(10, 'minute').asMilliseconds()
+const REFRESH_INTERVAL = moment.duration(15, 'minute').asMilliseconds()
 
 function Widget({ promise }: {
 	promise: Promise<EventsTypeSchema>
@@ -22,13 +20,11 @@ function Widget({ promise }: {
 	const parsed = useMemo(() => data.success ? parseSchedule(data) : null, [data])
 
 	return (
-		!data.success ?
-			<WidgetError message={data.error} /> :
-		!parsed!.exists ?
-			<WidgetError message="No schedule information found." /> :
+		parsed == null ?
+			<WidgetError message={(data as any).error ?? "No schedule information found."} /> :
 		<>
-			<Letter header={parsed!.header} />
-			<Headlines when={parsed!.when} header={parsed!.header} />
+			<Letter header={parsed.header} />
+			<Headlines when={parsed.when} header={parsed.header} />
 		</>
 	)
 }

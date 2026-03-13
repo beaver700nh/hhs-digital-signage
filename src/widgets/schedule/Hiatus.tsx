@@ -1,7 +1,7 @@
 import type { NextDaySchedule } from "./parser"
 
 export default function Hiatus({ hiatus }:
-	Pick<NextDaySchedule & { exists: true }, 'hiatus'>
+	Pick<NextDaySchedule, 'hiatus'>
 ) {
 	if (hiatus == null)
 		return null
