@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useRef, useCallback, useState } from 'react'
 import moment from 'moment'
 
 import Dots from './widgets/Dots'
@@ -13,17 +13,30 @@ export const ActiveWidgetContext = createContext(-1)
 
 export default function Carousel() {
 	const [activeWidget, setActiveWidget] = useState(0)
+	const interval = useRef<number | null>(null)
 
-	useEffect(() => {
-		const interval = setInterval(() => setActiveWidget(nextWidget), REFRESH_INTERVAL)
-		return () => clearInterval(interval)
-	}, [REFRESH_INTERVAL, Widgets])
+	const cleanupInterval = useCallback(() => {
+		interval.current && clearInterval(interval.current)
+	}, [])
+
+	const startInterval = useCallback((trigger: boolean) => {
+		cleanupInterval()
+
+		function action(trigger: boolean) {
+			trigger && setActiveWidget(nextWidget)
+			return () => action(true)
+		}
+
+		interval.current = setInterval(action(trigger), REFRESH_INTERVAL)
+	}, [cleanupInterval])
+
+	useEffect(() => (startInterval(false), cleanupInterval), [startInterval, cleanupInterval])
 
 	return (
 		<article
 			id="carousel"
 			onContextMenu={e => {
-				setActiveWidget(nextWidget)
+				startInterval(true)
 				e.preventDefault()
 			}}
 		>
