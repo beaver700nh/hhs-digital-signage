@@ -1,56 +1,41 @@
 import moment from 'moment'
 
-import { lookupConfiguration, type EventsTypeSchema } from '@/data/api'
-// import * as Regex from './regex'
+import { type EventsTypeSchema } from '@/data/api'
+import * as Regex from './regex'
 
-// export type ScheduleHeader = {
-// 	// e.g. 'A Day'
-// 	type: 'normal'
-// 	letter: string
-// } | {
-// 	// e.g. 'D Day - Transition Day' or 'Half Day'
-// 	type: 'special'
-// 	letter?: string
-// 	quirk: string
-// }
-
-// export type BellSchedule = {
-// 	type: 'none'
-// } | {
-// 	type: 'html'
-// 	data: string
-// } | {
-// 	type: 'text'
-// 	data: string[]
-// } | {
-// 	type: 'table'
-// 	data: {
-// 		start: string
-// 		end: string
-// 		name: string
-// 	}[]
-// }
-
-// export type NextDaySchedule = {
-// 	when: moment.Moment
-// 	header: ScheduleHeader
-// 	schedule?: BellSchedule
-// 	hiatus?: {
-// 		// e.g. false, ['PD Day']
-// 		// e.g. true, []
-// 		// e.g. true, ['PD Day', 'Spring Break]
-// 		names: string[]
-// 		weekend: boolean | 'summer'
-// 	}
-// }
-
+export type DayLunch = {
+	when: moment.Moment
+	name: string
+	sides: string[]
+	isVegetarian: boolean
+}
 
 export default function parseLunch(
 	data: EventsTypeSchema & { success: true },
 ):
-	any {
+	DayLunch[] {
+	return data.items
+		.filter(item => item.summary.match(Regex.NO_SCHOOL) == null)
+		.slice(0, 3)
+		.map(parseLunchItem)
+}
+
+function parseLunchItem(
+	item: (EventsTypeSchema & { success: true })['items'][number]
+): DayLunch {
+	const vegetarianMatch = item.summary.match(Regex.VEGETARIAN)
+	const vegetarian = vegetarianMatch != null
+	const name = vegetarian ? vegetarianMatch[1] : item.summary
+
+	const sides = item.description
+		?.split(/[\,;\-/\n]+/)
+		?.map(s => s.trim())
+		?.filter(s => s.length > 0) ?? []
+
 	return {
-		success: true,
-		data: data.items.map(x => x.summary),
+		when: moment(item.start.date),
+		name,
+		sides,
+		isVegetarian: vegetarian,
 	}
 }

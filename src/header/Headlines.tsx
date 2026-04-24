@@ -1,14 +1,5 @@
-import type { NextDaySchedule } from "@/widgets/schedule/parser"
-
-const DATE_FORMATS = {
-	lastDay: '[Yesterday]',
-	sameDay: '[Today]',
-	nextDay: '[Tomorrow]',
-	lastWeek: '[Last] dddd',
-	thisWeek: 'dddd',
-	nextWeek: '[Next] dddd',
-	sameElse: 'MMM Do',
-}
+import { DATE_FORMATS } from '@/data/api'
+import type { NextDaySchedule } from '@/widgets/schedule/parser'
 
 export default function Headlines({ when, header }:
 	Pick<NextDaySchedule & { exists: true }, 'when' | 'header'>

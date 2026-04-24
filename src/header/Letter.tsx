@@ -1,4 +1,4 @@
-import type { NextDaySchedule } from "@/widgets/schedule/parser"
+import type { NextDaySchedule } from '@/widgets/schedule/parser'
 
 export default function Letter({ header }:
 	Pick<NextDaySchedule & { exists: true }, 'header'>

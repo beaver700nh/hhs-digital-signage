@@ -1,4 +1,4 @@
-import type { NextDaySchedule } from "./parser"
+import type { NextDaySchedule } from './parser'
 
 export default function Hiatus({ hiatus }:
 	Pick<NextDaySchedule, 'hiatus'>

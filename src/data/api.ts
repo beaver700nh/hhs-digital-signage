@@ -1,6 +1,14 @@
 import moment from "moment"
 
-const API_KEY = import.meta.env.VITE_GAPI_KEY
+export const DATE_FORMATS = {
+	lastDay: '[Yesterday]',
+	sameDay: '[Today]',
+	nextDay: '[Tomorrow]',
+	lastWeek: '[Last] dddd',
+	thisWeek: 'dddd',
+	nextWeek: '[Next] dddd',
+	sameElse: 'MMM Do',
+}
 
 export type EventsTypeSchema = {
 	success: true
@@ -20,6 +28,8 @@ export type EventsTypeSchema = {
 	success: false
 	error: string
 }
+
+const API_KEY = import.meta.env.VITE_GAPI_KEY
 
 export async function fetchCalendarEvents(id: string): Promise<EventsTypeSchema> {
 	let url = new URL(`https://www.googleapis.com/calendar/v3/calendars/${id}/events`)

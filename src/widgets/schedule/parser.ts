@@ -44,7 +44,6 @@ export type NextDaySchedule = {
 	}
 }
 
-
 export default function parseSchedule(
 	data: EventsTypeSchema & { success: true },
 	verbose: boolean = false,

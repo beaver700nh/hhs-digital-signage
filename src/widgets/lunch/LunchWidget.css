@@ -1,0 +1,60 @@
+.table-wrapper {
+	margin: 0 1rem;
+	text-align: center;
+	font-size: 150%;
+	overflow: clip;
+}
+
+.lunch-info {
+	table-layout: fixed;
+	border-collapse: separate;
+	border-spacing: 0.75rem;
+	margin: -0.75rem;
+
+	.title {
+		font-size: 120%;
+		color: var(--fg-accent1);
+
+		* {
+			padding-block-end: 0.25rem;
+		}
+	}
+
+	.day-lunch {
+		.day {
+			font-weight: bold;
+			text-align: end;
+			padding-inline-end: 1rem;
+			border-inline-end: 0.15rem solid var(--bg-accent2);
+		}
+
+		.content {
+			text-align: start;
+			padding-block: 0.5rem;
+
+			.name {
+				text-decoration: underline;
+				text-decoration-color: var(--fg-accent2);
+
+				[data-vegetarian="true"] &::after {
+					display: inline-block;
+					content: "\1f331";
+					margin-left: 0.5rem;
+					filter: drop-shadow(0 0 0.15rem var(--bg-accent2))
+				}
+			}
+		
+			.sides {
+				font-style: italic;
+				padding-inline-start: 1rem;
+				list-style-type: "\2013";
+				margin: 0.25rem 0 0;
+
+				& > * {
+					padding-inline-start: 0.25rem;
+					font-size: 80%;
+				}
+			}
+		}
+	}
+}

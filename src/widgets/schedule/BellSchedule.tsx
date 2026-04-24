@@ -29,7 +29,7 @@ export default function BellSchedule({ schedule }: { schedule: BellSchedule }) {
 					{schedule.data.map((line, index) =>
 						<tr
 							key={index}
-							className='line'
+							className="line"
 							data-lunch={line.name.match(Regex.LUNCH_BLOCK)}
 						>
 							<td>{line.start} &ndash; {line.end}</td>
