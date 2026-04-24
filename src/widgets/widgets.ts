@@ -2,10 +2,11 @@ import { lookupConfiguration } from '@/data/api'
 
 import PlaceholderWidget from './placeholder/PlaceholderWidget'
 import ScheduleWidget from './schedule/ScheduleWidget'
+import LunchWidget from './lunch/LunchWidget'
 
 const Widgets = [
 	ScheduleWidget,
-	PlaceholderWidget,
+	LunchWidget,
 	PlaceholderWidget,
 ]
 	.filter((_, index) => !lookupConfiguration('disableWidgets')?.includes(index))
