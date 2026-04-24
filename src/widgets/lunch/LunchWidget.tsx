@@ -14,7 +14,7 @@ const LunchWidget: WidgetRenderer = ({ promise }) => {
 		parsed == null ?
 			<WidgetError message={(data as any).error ?? "No schedule information found."} /> :
 		<>
-			<pre style={{ whiteSpace: 'pre-wrap', overflowX: 'clip' }}>{JSON.stringify(parsed, null, 2)}</pre>
+			<pre style={{ whiteSpace: 'pre-wrap', width: '100%' }}>{JSON.stringify(parsed, null, 2)}</pre>
 		</>
 	)
 }

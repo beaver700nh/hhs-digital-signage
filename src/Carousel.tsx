@@ -17,6 +17,7 @@ export default function Carousel() {
 
 	const cleanupInterval = useCallback(() => {
 		interval.current && clearInterval(interval.current)
+		interval.current = null
 	}, [])
 
 	const startInterval = useCallback((trigger: boolean) => {
@@ -36,7 +37,11 @@ export default function Carousel() {
 		<article
 			id="carousel"
 			onContextMenu={e => {
-				startInterval(true)
+				if (e.ctrlKey)
+					cleanupInterval()
+				else
+					startInterval(true)
+
 				e.preventDefault()
 			}}
 		>

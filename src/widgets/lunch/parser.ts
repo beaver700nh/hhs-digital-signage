@@ -51,6 +51,6 @@ export default function parseLunch(
 	any {
 	return {
 		success: true,
-		data: data.items,
+		data: data.items.map(x => x.summary),
 	}
 }

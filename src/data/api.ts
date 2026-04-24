@@ -66,6 +66,6 @@ export interface LocalStorageSchema {
 	disableWidgets: number[]
 }
 
-export function lookupConfiguration< K extends keyof LocalStorageSchema >(key: K): LocalStorageSchema[K] | null {
+export function lookupConfiguration<K extends keyof LocalStorageSchema>(key: K): LocalStorageSchema[K] | null {
 	return localStorage.getItem(key) as (LocalStorageSchema[K] | null)
 }

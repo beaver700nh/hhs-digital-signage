@@ -4,8 +4,10 @@ Source code for signage such as the TV in the lobby. Written by Holliston High S
 
 ## Controls
 
-- Click on a widget to reload it
-- Right click the carousel to switch to the next widget
+- **Left-click** on a widget to reload it
+- **Right-click** the carousel to switch to the next widget
+- **Ctrl + right-click** the carousel to stop cycling widgets
+	- Resume cycling by right-clicking once
 
 ## Configuration
 
