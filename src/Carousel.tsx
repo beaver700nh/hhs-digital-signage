@@ -46,11 +46,13 @@ export default function Carousel() {
 			}}
 		>
 			<ActiveWidgetContext.Provider value={activeWidget}>
-				{Widgets.map((Widget, index) => <WidgetWrapper
-					key={index}
-					index={index}
-					RendererComponent={Widget}
-				/>)}
+				{Widgets.map((Widget, index) =>
+					<WidgetWrapper
+						key={index}
+						index={index}
+						RendererComponent={Widget}
+					/>
+				)}
 				<Dots count={Widgets.length} />
 			</ActiveWidgetContext.Provider>
 		</article>

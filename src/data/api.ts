@@ -19,9 +19,11 @@ export type EventsTypeSchema = {
 		description?: string
 		start: {
 			date: string
+			dateTime: string
 		}
 		end: {
 			date: string
+			dateTime: string
 		}
 	}[]
 } | {
@@ -29,10 +31,17 @@ export type EventsTypeSchema = {
 	error: string
 }
 
+export type CalendarFetchParameters = {
+	calendarId?: string
+	config?: {
+		useLiveTiming: boolean
+	}
+}
+
 const API_KEY = import.meta.env.VITE_GAPI_KEY
 
-export async function fetchCalendarEvents(id: string): Promise<EventsTypeSchema> {
-	let url = new URL(`https://www.googleapis.com/calendar/v3/calendars/${id}/events`)
+export async function fetchCalendarEvents(params: CalendarFetchParameters): Promise<EventsTypeSchema> {
+	let url = new URL(`https://www.googleapis.com/calendar/v3/calendars/${params.calendarId}/events`)
 
 	const override = (window as any).DATE_OVERRIDE
 
@@ -42,16 +51,25 @@ export async function fetchCalendarEvents(id: string): Promise<EventsTypeSchema>
 	// Debug: Makes it load forever
 	// return new Promise(() => {})
 
-	let params = new URLSearchParams({
+	if (params.config != null)
+		console.info(`This calendar has a special configuration: ${JSON.stringify(params.config)}`)
+
+	const start = moment(override ?? undefined)
+	// Begin querying the next day at 5pm (17:00 + 7h = midnight)
+	if (!params.config?.useLiveTiming)
+		start.add(7, 'hours')
+
+	const timeMin = start.toISOString()
+
+	let searchParams = new URLSearchParams({
 		key: API_KEY,
 		singleEvents: 'true',
 		orderBy: 'startTime',
-		// Begin querying the next day at 4pm (16:00 + 8h = midnight)
-		timeMin: moment(override ?? undefined).add(8, 'hours').toISOString(),
+		timeMin,
 	})
 
-	url.search = params.toString()
-	console.info(`Fetching Google Calendar events from '${url.toString()}'`)
+	url.search = searchParams.toString()
+	console.info(`Fetching Google Calendar events for timestamp '${timeMin}' from '${url.toString()}'`)
 
 	try {
 		const response = await fetch(url)

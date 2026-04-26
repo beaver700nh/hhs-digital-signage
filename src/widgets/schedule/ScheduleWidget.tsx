@@ -22,6 +22,6 @@ const ScheduleWidget: WidgetRenderer = ({ promise }) => {
 	)
 }
 
-ScheduleWidget.CAL_ID = 'sulsp2f8e4npqtmdp469o8tmro@group.calendar.google.com'
+ScheduleWidget.calendarId = 'sulsp2f8e4npqtmdp469o8tmro@group.calendar.google.com'
 export default ScheduleWidget
 

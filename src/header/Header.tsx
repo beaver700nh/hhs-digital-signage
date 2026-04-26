@@ -29,7 +29,7 @@ function Widget({ promise }: {
 	)
 }
 
-const CAL_ID = 'sulsp2f8e4npqtmdp469o8tmro@group.calendar.google.com'
+const calendarId = 'sulsp2f8e4npqtmdp469o8tmro@group.calendar.google.com'
 
 export default function Header() {
 	const [promise, setPromise] = useState<Promise<EventsTypeSchema> | null>(null)
@@ -37,12 +37,13 @@ export default function Header() {
 
 	useEffect(() => {
 		const interval = setInterval((function iife() {
-				setPromise(fetchCalendarEvents(CAL_ID))
+				setPromise(fetchCalendarEvents({ calendarId }))
 			return iife
 		})(), REFRESH_INTERVAL)
 
 		return () => clearInterval(interval)
 	}, [refreshKey])
+
 	return (
 		<article
 			id="header"

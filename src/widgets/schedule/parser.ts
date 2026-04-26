@@ -47,8 +47,7 @@ export type NextDaySchedule = {
 export default function parseSchedule(
 	data: EventsTypeSchema & { success: true },
 	verbose: boolean = false,
-):
-	NextDaySchedule | null {
+): NextDaySchedule | null {
 	let nextDay: NextDaySchedule | null = null
 	let hiatus = []
 

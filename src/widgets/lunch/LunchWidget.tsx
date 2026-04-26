@@ -20,5 +20,5 @@ const LunchWidget: WidgetRenderer = ({ promise }) => {
 	)
 }
 
-LunchWidget.CAL_ID = 'holliston.k12.ma.us_c2d4uic3gbsg7r9vv9qo8a949g@group.calendar.google.com'
+LunchWidget.calendarId = 'holliston.k12.ma.us_c2d4uic3gbsg7r9vv9qo8a949g@group.calendar.google.com'
 export default LunchWidget

@@ -12,8 +12,7 @@ export type DayLunch = {
 
 export default function parseLunch(
 	data: EventsTypeSchema & { success: true },
-):
-	DayLunch[] {
+): DayLunch[] {
 	return data.items
 		.filter(item => item.summary.match(Regex.NO_SCHOOL) == null)
 		.slice(0, 3)

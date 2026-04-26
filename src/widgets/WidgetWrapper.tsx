@@ -1,14 +1,14 @@
 import { useEffect, useState, useContext, Suspense, type ComponentType } from 'react'
 import moment from 'moment'
 
-import { fetchCalendarEvents, type EventsTypeSchema } from '@/data/api'
+import { fetchCalendarEvents, type EventsTypeSchema, type CalendarFetchParameters } from '@/data/api'
 import { nextWidget, prevWidget } from './widgets';
 import { ActiveWidgetContext } from '@/Carousel'
 import WidgetLoading from './placeholder/WidgetLoading'
 
 import './WidgetWrapper.css'
 
-export type WidgetRenderer = ComponentType<{ promise: Promise<EventsTypeSchema> }> & { CAL_ID?: string }
+export type WidgetRenderer = ComponentType<{ promise: Promise<EventsTypeSchema> }> & CalendarFetchParameters
 
 const REFRESH_INTERVAL = moment.duration(5, 'minute').asMilliseconds()
 
@@ -21,14 +21,14 @@ export default function WidgetWrapper({ index, RendererComponent }: {
 
 	useEffect(() => {
 		const interval = setInterval((function iife() {
-			if (RendererComponent.CAL_ID != null) {
-				setPromise(fetchCalendarEvents(RendererComponent.CAL_ID))
+			if (RendererComponent.calendarId != null) {
+				setPromise(fetchCalendarEvents(RendererComponent))
 			}
 			return iife
 		})(), REFRESH_INTERVAL)
 
 		return () => clearInterval(interval)
-	}, [RendererComponent.CAL_ID, refreshKey])
+	}, [RendererComponent, refreshKey])
 
 	const activeWidget = useContext(ActiveWidgetContext)
 	const animationState =
