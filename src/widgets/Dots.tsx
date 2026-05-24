@@ -1,13 +1,13 @@
-import { useContext } from 'react'
+import { use } from 'react'
 
-import { ActiveWidgetContext } from '@/Carousel'
+import ActiveWidgetContext from '@/widgets/ActiveWidgetContext'
 
 import './Dots.css'
 
 export default function Dots({ count }: {
 	count: number
 }) {
-	const activeWidget = useContext(ActiveWidgetContext)
+	const activeWidget = use(ActiveWidgetContext)
 
 	return (
 		<p className="carousel-dots">

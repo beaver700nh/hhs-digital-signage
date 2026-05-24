@@ -1,6 +1,7 @@
-import { createContext, useEffect, useRef, useCallback, useState } from 'react'
+import { useEffect, useRef, useCallback, useState } from 'react'
 import moment from 'moment'
 
+import ActiveWidgetContext from './widgets/ActiveWidgetContext'
 import Dots from './widgets/Dots'
 import WidgetWrapper from './widgets/WidgetWrapper'
 import Widgets, { nextWidget } from './widgets/widgets'
@@ -9,14 +10,12 @@ import './Carousel.css'
 
 const REFRESH_INTERVAL = moment.duration(10, 'seconds').asMilliseconds()
 
-export const ActiveWidgetContext = createContext(-1)
-
 export default function Carousel() {
 	const [activeWidget, setActiveWidget] = useState(0)
 	const interval = useRef<number | null>(null)
 
 	const cleanupInterval = useCallback(() => {
-		interval.current && clearInterval(interval.current)
+		if (interval.current) clearInterval(interval.current)
 		interval.current = null
 	}, [])
 
@@ -24,7 +23,7 @@ export default function Carousel() {
 		cleanupInterval()
 
 		function action(trigger: boolean) {
-			trigger && setActiveWidget(nextWidget)
+			if (trigger) setActiveWidget(activeWidget => nextWidget(activeWidget))
 			return () => action(true)
 		}
 
@@ -45,7 +44,7 @@ export default function Carousel() {
 				e.preventDefault()
 			}}
 		>
-			<ActiveWidgetContext.Provider value={activeWidget}>
+			<ActiveWidgetContext value={activeWidget}>
 				{Widgets.map((Widget, index) =>
 					<WidgetWrapper
 						key={index}
@@ -54,7 +53,7 @@ export default function Carousel() {
 					/>
 				)}
 				<Dots count={Widgets.length} />
-			</ActiveWidgetContext.Provider>
+			</ActiveWidgetContext>
 		</article>
 	)
 }

@@ -3,7 +3,7 @@ import moment from 'moment'
 import { type EventsTypeSchema } from '@/data/api'
 import * as Regex from './regex'
 
-export type DayLunch = {
+export interface DayLunch {
 	when: moment.Moment
 	name: string
 	sides: string[]
@@ -27,7 +27,7 @@ function parseLunchItem(
 	const name = vegetarian ? vegetarianMatch[1] : item.summary
 
 	const sides = item.description
-		?.split(/[\,;\-/\n]+/)
+		?.split(/[,;\-/\n]+/)
 		?.map(s => s.trim())
 		?.filter(s => s.length > 0) ?? []
 

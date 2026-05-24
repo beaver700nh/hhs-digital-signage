@@ -1,9 +1,10 @@
-import { useEffect, useState, useContext, Suspense, type ComponentType } from 'react'
+import { useEffect, useState, use, Suspense, type ComponentType } from 'react'
 import moment from 'moment'
 
 import { fetchCalendarEvents, type EventsTypeSchema, type CalendarFetchParameters } from '@/data/api'
-import { nextWidget, prevWidget } from './widgets';
-import { ActiveWidgetContext } from '@/Carousel'
+
+import ActiveWidgetContext from '@/widgets/ActiveWidgetContext'
+import { nextWidget, prevWidget } from './widgets'
 import WidgetLoading from './placeholder/WidgetLoading'
 
 import './WidgetWrapper.css'
@@ -30,7 +31,7 @@ export default function WidgetWrapper({ index, RendererComponent }: {
 		return () => clearInterval(interval)
 	}, [RendererComponent, refreshKey])
 
-	const activeWidget = useContext(ActiveWidgetContext)
+	const activeWidget = use(ActiveWidgetContext)
 	const animationState =
 		activeWidget === index ? 'focused' :
 		activeWidget === prevWidget(index) ? 'inbound' :

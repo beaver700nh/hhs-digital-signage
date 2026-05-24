@@ -31,7 +31,7 @@ export type BellSchedule = {
 	}[]
 }
 
-export type NextDaySchedule = {
+export interface NextDaySchedule {
 	when: moment.Moment
 	header: ScheduleHeader
 	schedule?: BellSchedule
@@ -46,10 +46,10 @@ export type NextDaySchedule = {
 
 export default function parseSchedule(
 	data: EventsTypeSchema & { success: true },
-	verbose: boolean = false,
+	verbose = false,
 ): NextDaySchedule | null {
 	let nextDay: NextDaySchedule | null = null
-	let hiatus = []
+	const hiatus = []
 
 	// We need to find the first day of school in the list
 	// We will also check if it's the last day before a hiatus
@@ -57,15 +57,13 @@ export default function parseSchedule(
 	for (const item of data.items) {
 		const letter = item.summary.match(Regex.VALID_DAYS)?.[1]
 		let quirk = item.summary.match(Regex.SPECIAL_DAYS)?.[0]?.toLowerCase()
-
-		if (quirk == null)
-			quirk = item.summary.match(Regex.SPECIAL_FALLBACK)?.[0]?.toLowerCase()
+		quirk ??= item.summary.match(Regex.SPECIAL_FALLBACK)?.[0]?.toLowerCase();
 
 		// Skip if not a school day
 
 		if (letter == null && quirk == null) {
 			// We only save hiatus info after we've already found a school day
-			nextDay != null && hiatus.push(item)
+			if (nextDay != null) hiatus.push(item)
 			continue
 		}
 
@@ -90,7 +88,7 @@ export default function parseSchedule(
 		// This is the second school day we've found
 		// There was potentially a hiatus between the first and second day
 		nextDay.hiatus = parseHiatus({
-			dayBefore: nextDay.when!,
+			dayBefore: nextDay.when,
 			dayAfter: moment(item.start.date),
 			events: hiatus,
 		})
@@ -157,7 +155,7 @@ function parseBellSchedule(description: string | undefined): BellSchedule {
 		}
 	}
 	catch (error) {
-		console.warn(`Couldn't interpret event description as bell schedule, falling back to plain text: ${(error as any).message}`)
+		console.warn(`Couldn't interpret event description as bell schedule, falling back to plain text: ${(error as Error).message}`)
 		return {
 			type: 'text',
 			data: parseBellScheduleToText(description),
@@ -170,7 +168,7 @@ function decodePotentialHtml(description: string) {
 	const walker = document.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT, null)
 
 	let node
-	let nodes = []
+	const nodes = []
 	while ((node = walker.nextNode()) != null)
 		if (node.nodeValue != null)
 			nodes.push(node.nodeValue)
@@ -221,7 +219,7 @@ function parseHiatus({ dayBefore, dayAfter, events }: {
 		return undefined
 	}
 
-	let hiatus: NextDaySchedule['hiatus'] = {
+	const hiatus: NextDaySchedule['hiatus'] = {
 		names: [],
 		weekend: hiatusLength >= 21 ? 'summer' : crossedWeekend,
 	}

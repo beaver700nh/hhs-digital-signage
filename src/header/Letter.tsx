@@ -16,7 +16,7 @@ export default function Letter({ header }:
 				{header.letter ?? "?"}
 			</text>
 			<text
-				x="100%" y="0%"
+				x="100%" y="3%"
 				textAnchor="end"
 				dominantBaseline="hanging"
 				fontSize="48%"

@@ -28,10 +28,12 @@ export type EventsTypeSchema = {
 	}[]
 } | {
 	success: false
-	error: string
+	error: {
+		message: string
+	}
 }
 
-export type CalendarFetchParameters = {
+export interface CalendarFetchParameters {
 	calendarId?: string
 	config?: {
 		useLiveTiming: boolean
@@ -41,9 +43,9 @@ export type CalendarFetchParameters = {
 const API_KEY = import.meta.env.VITE_GAPI_KEY
 
 export async function fetchCalendarEvents(params: CalendarFetchParameters): Promise<EventsTypeSchema> {
-	let url = new URL(`https://www.googleapis.com/calendar/v3/calendars/${params.calendarId}/events`)
+	const url = new URL(`https://www.googleapis.com/calendar/v3/calendars/${params.calendarId}/events`)
 
-	const override = (window as any).DATE_OVERRIDE
+	const override = (window as { DATE_OVERRIDE?: string }).DATE_OVERRIDE
 
 	if (override != null)
 		console.warn(`Using date override ${override} for Google Calendar API requests`)
@@ -61,7 +63,7 @@ export async function fetchCalendarEvents(params: CalendarFetchParameters): Prom
 
 	const timeMin = start.toISOString()
 
-	let searchParams = new URLSearchParams({
+	const searchParams = new URLSearchParams({
 		key: API_KEY,
 		singleEvents: 'true',
 		orderBy: 'startTime',
@@ -73,10 +75,12 @@ export async function fetchCalendarEvents(params: CalendarFetchParameters): Prom
 
 	try {
 		const response = await fetch(url)
-		let data = await response.json()
+		const data = await response.json() as EventsTypeSchema
 
-		if (!response.ok)
-			throw new Error(`Google Calendar API returned ${response.status} ${data.error?.message}`)
+		if (!response.ok) {
+			const error = data as EventsTypeSchema & { success: false }
+			throw new Error(`Google Calendar API returned ${response.status} ${error.error.message}`)
+		}
 
 		data.success = true
 		return data
@@ -84,7 +88,7 @@ export async function fetchCalendarEvents(params: CalendarFetchParameters): Prom
 	catch (error) {
 		return {
 			success: false,
-			error: (error as any).message ?? 'Couldn\'t reach Google Calendar',
+			error: error as Error
 		}
 	}
 }
@@ -92,6 +96,7 @@ export async function fetchCalendarEvents(params: CalendarFetchParameters): Prom
 export interface LocalStorageSchema {
 	disableHtmlSchedule: boolean
 	disableWidgets: number[]
+	// TODO add slideshow/carousel scroll speeds
 }
 
 export function lookupConfiguration<K extends keyof LocalStorageSchema>(key: K): LocalStorageSchema[K] | null {

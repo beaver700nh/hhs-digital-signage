@@ -1,5 +1,5 @@
 import * as Regex from './regex'
-import type { BellSchedule } from "./parser"
+import type { BellSchedule } from './parser'
 
 export default function BellSchedule({ schedule }: { schedule: BellSchedule }) {
 	switch (schedule.type) {
@@ -9,6 +9,7 @@ export default function BellSchedule({ schedule }: { schedule: BellSchedule }) {
 		)
 	case 'html':
 		return (
+			// eslint-disable-next-line react-dom/no-dangerously-set-innerhtml
 			<div className="bell-sched html" dangerouslySetInnerHTML={{ __html: schedule.data }} />
 		)
 	case 'text':

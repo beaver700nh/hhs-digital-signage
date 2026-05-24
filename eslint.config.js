@@ -13,13 +13,18 @@ export default defineConfig([
     files: ['**/*.{ts,tsx}'],
     extends: [
       js.configs.recommended,
-      tseslint.configs.strictTypeChecked,
+			tseslint.configs.recommendedTypeChecked,
       tseslint.configs.stylisticTypeChecked,
       reactDom.configs.recommended,
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
       reactX.configs['recommended-typescript'],
     ],
+		rules: {
+			'@typescript-eslint/no-empty-function': 'off',
+			'@typescript-eslint/restrict-template-expressions': 'off',
+			'react-x/no-array-index-key': 'off',
+    },
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,

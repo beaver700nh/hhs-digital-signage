@@ -1,5 +1,7 @@
 import { use, useMemo } from 'react'
 
+import type { EventsTypeSchema } from '@/data/api'
+
 import type { WidgetRenderer } from '../WidgetWrapper'
 import parseSchedule from './parser'
 import WidgetError from '../placeholder/WidgetError'
@@ -14,14 +16,14 @@ const ScheduleWidget: WidgetRenderer = ({ promise }) => {
 
 	return (
 		parsed == null ?
-			<WidgetError message={(data as any).error ?? "No schedule information found."} /> :
+			<WidgetError message={(data as EventsTypeSchema & { success: false }).error.message
+				?? "No schedule information found."} /> :
 		<>
-			<BellSchedule schedule={parsed!.schedule!} />
-			<Hiatus hiatus={parsed!.hiatus} />
+			<BellSchedule schedule={parsed.schedule!} />
+			<Hiatus hiatus={parsed.hiatus} />
 		</>
 	)
 }
 
 ScheduleWidget.calendarId = 'sulsp2f8e4npqtmdp469o8tmro@group.calendar.google.com'
 export default ScheduleWidget
-
