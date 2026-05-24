@@ -5,12 +5,14 @@ import ScheduleWidget from './schedule/ScheduleWidget'
 import LunchWidget from './lunch/LunchWidget'
 import AthleticsWidget from './athletics/AthleticsWidget'
 
+const disabledWidgets = lookupConfiguration('disableWidgets')
+
 const Widgets = [
 	ScheduleWidget,
 	LunchWidget,
 	AthleticsWidget,
 ]
-	.filter((_, index) => !lookupConfiguration('disableWidgets')?.includes(index))
+	.filter((_, index) => !disabledWidgets.includes(index))
 
 export default Widgets
 

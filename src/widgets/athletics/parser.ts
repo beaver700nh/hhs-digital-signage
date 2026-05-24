@@ -6,7 +6,7 @@ import * as Regex from './regex'
 type Schema = EventsTypeSchema & { success: true }
 type Item = Schema['items'][number]
 
-export type AthleticsEvent = {
+export interface AthleticsEvent {
 	when: moment.Moment
 	sport: string
 	opponent?: string

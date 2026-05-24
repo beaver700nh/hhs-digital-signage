@@ -1,5 +1,6 @@
 import { useEffect, useRef, useCallback, useState } from 'react'
-import moment from 'moment'
+
+import { lookupConfiguration } from '@/data/api'
 
 import ActiveWidgetContext from './widgets/ActiveWidgetContext'
 import Dots from './widgets/Dots'
@@ -8,36 +9,36 @@ import Widgets, { nextWidget } from './widgets/widgets'
 
 import './Carousel.css'
 
-const REFRESH_INTERVAL = moment.duration(10, 'seconds').asMilliseconds()
-
 export default function Carousel() {
 	const [activeWidget, setActiveWidget] = useState(0)
 	const interval = useRef<number | null>(null)
 
-	const cleanupInterval = useCallback(() => {
+	const advanceInterval = lookupConfiguration('carouselAdvanceInterval')
+
+	const cleanUpInterval = useCallback(() => {
 		if (interval.current) clearInterval(interval.current)
 		interval.current = null
 	}, [])
 
 	const startInterval = useCallback((trigger: boolean) => {
-		cleanupInterval()
+		cleanUpInterval()
 
 		function action(trigger: boolean) {
 			if (trigger) setActiveWidget(activeWidget => nextWidget(activeWidget))
 			return () => action(true)
 		}
 
-		interval.current = setInterval(action(trigger), REFRESH_INTERVAL)
-	}, [cleanupInterval])
+		interval.current = setInterval(action(trigger), advanceInterval)
+	}, [cleanUpInterval, advanceInterval])
 
-	useEffect(() => (startInterval(false), cleanupInterval), [startInterval, cleanupInterval])
+	useEffect(() => (startInterval(false), cleanUpInterval), [startInterval, cleanUpInterval])
 
 	return (
 		<article
 			id="carousel"
 			onContextMenu={e => {
 				if (e.ctrlKey)
-					cleanupInterval()
+					cleanUpInterval()
 				else
 					startInterval(true)
 

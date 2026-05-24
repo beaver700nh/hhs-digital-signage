@@ -11,7 +11,7 @@ export const VALID_DAYS = /^\s*(?:(?:[Ee]xams?|[Tt]ransition)?(?:\s*[Dd]ay)?)?\W
 /**
  * Just looking for certain trigger words.
  */
-export const SPECIAL_DAYS = /(exam)|(transition)|(last)|(half|1\/2)/gi
+export const SPECIAL_DAYS = /(exam)|(mcas)|(transition)|(last)|(half|1\/2)/gi
 export const SPECIAL_FALLBACK = /\*|special|schedule/gi
 export const NO_SCHOOL = /(?:-\s*)?\s*no\s+school\s*(?:-\s*)?/gi
 export const VACATION = /\b(\w+\s+(?:break|vacation))/gi

@@ -1,4 +1,4 @@
-import moment from "moment"
+import moment from 'moment'
 
 export const DATE_FORMATS = {
 	lastDay: '[Yesterday]',
@@ -93,12 +93,26 @@ export async function fetchCalendarEvents(params: CalendarFetchParameters): Prom
 	}
 }
 
-export interface LocalStorageSchema {
-	disableHtmlSchedule: boolean
-	disableWidgets: number[]
-	// TODO add slideshow/carousel scroll speeds
+export const localStorageDefaults = {
+	disableHtmlSchedule: false,
+	disableWidgets: [] as number[],
+	carouselAdvanceInterval: moment.duration(10, 'seconds').asMilliseconds(),
+	carouselRefreshInterval: moment.duration(5, 'minutes').asMilliseconds(),
+	slideshowAdvanceInterval: moment.duration(15, 'seconds').asMilliseconds(),
+	slideshowRefreshInterval: moment.duration(1, 'hour').asMilliseconds(),
 }
 
-export function lookupConfiguration<K extends keyof LocalStorageSchema>(key: K): LocalStorageSchema[K] | null {
-	return localStorage.getItem(key) as (LocalStorageSchema[K] | null)
+type LocalStorageSchema = typeof localStorageDefaults
+
+export function lookupConfiguration<K extends keyof LocalStorageSchema>(key: K) {
+	let value = localStorage.getItem(key) as (LocalStorageSchema[K] | null)
+	let fallback = false
+
+	if (value === null) {
+		fallback = true
+		value = localStorageDefaults[key]
+	}
+
+	console.info(`Using configuration key '${key}' with value '${value}'${fallback ? ' (fallback)' : ''}`)
+	return value
 }

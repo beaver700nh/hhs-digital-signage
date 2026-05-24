@@ -37,8 +37,25 @@ Set these options in LocalStorage as specified, or remove them completely for th
 
 #### `disableHtmlSchedule` (number)
 
-- Forces HTML bell schedules to render as plain text when set to `1`.
+- Forces HTML bell schedules to render as sanitized plain text when set to `1`.
 
 #### `disableWidgets` (array)
 
-- Removes the specified widgets (zero-indexed) from the carousel. For example, `[0, 2]` will hide the first and third widgets.
+- Removes the specified widgets (zero-indexed) from the carousel.
+- For example, `[0, 2]` will hide the first and third widgets.
+
+#### `carouselAdvanceInterval` (number)
+
+- Milliseconds it takes for the carousel to advance
+
+#### `carouselRefreshInterval` (number)
+
+- Milliseconds it takes for carousel widgets to reload
+
+#### `slideshowAdvanceInterval` (number)
+
+- Milliseconds it takes for the slideshow to advance
+
+#### `slideshowRefreshInterval` (number)
+
+- Milliseconds it takes for the slideshow embed to reload
