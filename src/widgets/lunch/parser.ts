@@ -15,7 +15,7 @@ export default function parseLunch(
 ): DayLunch[] {
 	return data.items
 		.filter(item => item.summary.match(Regex.NO_SCHOOL) == null)
-		.slice(0, 3)
+		.slice(0, 5)
 		.map(parseLunchItem)
 }
 

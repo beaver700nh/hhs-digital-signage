@@ -25,7 +25,7 @@ Source code for signage such as the TV in the lobby. Written by Holliston High S
 
 ### 2. Upcoming Lunch (Carousel)
 
-- Shows the lunch menus of the upcoming three days of school
+- Shows the lunch menus of the upcoming five days of school
 
 ### 3. Athletics Events (Carousel)
 

@@ -43,14 +43,15 @@
 					filter: drop-shadow(0 0 0.15rem var(--bg-accent2))
 				}
 			}
-		
+
 			.sides {
 				font-style: italic;
 				padding-inline-start: 1rem;
 				list-style-type: "\2013";
-				margin: 0.25rem 0 0;
+				margin: 0.5rem 0 0;
 
 				& > * {
+					margin-block-start: 0.25rem;
 					padding-inline-start: 0.25rem;
 					font-size: 80%;
 				}

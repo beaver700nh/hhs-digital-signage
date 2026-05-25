@@ -22,14 +22,15 @@ export interface AthleticsEvent {
 export type AthleticsCalendar = Record<string, {
 		when: moment.Moment
 		events: Omit<AthleticsEvent, 'when'>[]
-	}>;
+	}>
 
 export default function parseAthletics(data: Schema): AthleticsCalendar {
 	const parsed = data.items
-		.slice(0, 5)
+		.slice(0, 8)
 		.map(parseAthleticsEvent)
 
 	const calendar: AthleticsCalendar = {}
+
 	for (const item of parsed) {
 		const id = item.when.unix()
 

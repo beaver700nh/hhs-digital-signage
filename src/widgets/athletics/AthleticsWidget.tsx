@@ -1,8 +1,11 @@
 import { use, useMemo } from 'react'
 
+import type { EventsTypeSchema } from '@/data/api'
+
 import type { WidgetRenderer } from '../WidgetWrapper'
 import parseAthletics from './parser'
 import WidgetError from '../placeholder/WidgetError'
+import AthleticsInfo from './AthleticsInfo'
 
 import './AthleticsWidget.css'
 
@@ -11,10 +14,11 @@ const AthleticsWidget: WidgetRenderer = ({ promise }) => {
 	const parsed = useMemo(() => data.success ? parseAthletics(data) : null, [data])
 
 	return (
-		parsed == null || parsed.length === 0 ?
-			<WidgetError message={(data as any).error ?? "No lunch information found."} /> :
+		parsed == null ?
+			<WidgetError message={(data as EventsTypeSchema & { success: false }).error.message
+				?? "No athletics information found."} /> :
 		<>
-			<pre>{JSON.stringify(parsed, null, 2)}</pre>
+			<AthleticsInfo calendar={parsed} />
 		</>
 	)
 }
