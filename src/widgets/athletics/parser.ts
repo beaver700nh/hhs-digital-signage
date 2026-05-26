@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-import { type EventsTypeSchema } from '@/data/api'
+import { lookupConfiguration, type EventsTypeSchema } from '@/data/api'
 import * as Regex from './regex'
 
 type Schema = EventsTypeSchema & { success: true }
@@ -25,8 +25,9 @@ export type AthleticsCalendar = Record<string, {
 	}>
 
 export default function parseAthletics(data: Schema): AthleticsCalendar {
+	const maxItems = lookupConfiguration('athleticsListMax')
 	const parsed = data.items
-		.slice(0, 8)
+		.slice(0, maxItems)
 		.map(parseAthleticsEvent)
 
 	const calendar: AthleticsCalendar = {}

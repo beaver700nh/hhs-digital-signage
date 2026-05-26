@@ -25,11 +25,11 @@ Source code for signage such as the TV in the lobby. Written by Holliston High S
 
 ### 2. Upcoming Lunch (Carousel)
 
-- Shows the lunch menus of the upcoming five days of school
+- Shows upcoming lunch menus with specials and sides
 
 ### 3. Athletics Events (Carousel)
 
-- Shows the upcoming five sports games, with time, teams, and location
+- Shows upcoming sports games with time, teams, and location
 
 ## Configuration
 
@@ -43,6 +43,14 @@ Set these options in LocalStorage as specified, or remove them completely for th
 
 - Removes the specified widgets (zero-indexed) from the carousel.
 - For example, `[0, 2]` will hide the first and third widgets.
+
+#### `lunchListMax` (number)
+
+- Maximum number of daily menus to show in the lunch widget.
+
+#### `athleticsListMax` (number)
+
+- Maximum number of athletics events to show in the athletics widget.
 
 #### `carouselAdvanceInterval` (number)
 

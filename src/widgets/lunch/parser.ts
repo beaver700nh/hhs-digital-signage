@@ -1,6 +1,6 @@
 import moment from 'moment'
 
-import { type EventsTypeSchema } from '@/data/api'
+import { lookupConfiguration, type EventsTypeSchema } from '@/data/api'
 import * as Regex from './regex'
 
 export interface DayLunch {
@@ -13,9 +13,10 @@ export interface DayLunch {
 export default function parseLunch(
 	data: EventsTypeSchema & { success: true },
 ): DayLunch[] {
+	const maxItems = lookupConfiguration('lunchListMax')
 	return data.items
 		.filter(item => item.summary.match(Regex.NO_SCHOOL) == null)
-		.slice(0, 5)
+		.slice(0, maxItems)
 		.map(parseLunchItem)
 }
 
