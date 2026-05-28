@@ -75,8 +75,13 @@ function parseAthleticsEvent(item: Item): AthleticsEvent {
 			homeAway === '@' ? 'away' :
 			undefined,
 		location: {
-			site,
-			subsite: site == null || subsite == null || site.includes(subsite)
+			site: site != null && subsite?.includes(site)
+				? subsite : site,
+			subsite: false // eslint-disable-line no-constant-binary-expression
+				|| site == null
+				|| subsite == null
+				|| site.includes(subsite)
+				|| subsite.includes(site)
 				? undefined : subsite,
 		},
 	}

@@ -167,9 +167,9 @@ function decodePotentialHtml(description: string) {
 	const doc = new DOMParser().parseFromString(description, 'text/html')
 	const walker = document.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT, null)
 
-	let node
 	const nodes = []
-	while ((node = walker.nextNode()) != null)
+
+	for (let node; (node = walker.nextNode()) != null;)
 		if (node.nodeValue != null)
 			nodes.push(node.nodeValue)
 

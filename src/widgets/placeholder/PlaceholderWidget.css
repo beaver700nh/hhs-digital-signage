@@ -3,7 +3,7 @@
 	margin: auto 0;
 	padding: 4rem;
 	font-size: 4rem;
-	color: var(--bg-plain);
+	color: var(--fg-plain);
 	background-color: var(--bg-accent1);
 	border: 0.25rem solid var(--bg-accent2);
 	border-radius: 1rem;

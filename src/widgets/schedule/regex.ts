@@ -75,3 +75,8 @@ export const BELL_SCHEDULE = (() => {
  * If the class contains "Nth lunch" of some sort, it's probably a lunch block.
  */
 export const LUNCH_BLOCK = /(?:\d\s*\w{0,2}|first|second|third|last)\W*lunch/i
+
+/**
+ * Assuming the core learning periods follow the "X (Block|Period)" format.
+ */
+export const CLASS_BLOCK = /\b(\w)\s+(?:block|period)/i

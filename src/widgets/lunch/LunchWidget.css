@@ -8,8 +8,8 @@
 .lunch-info {
 	table-layout: fixed;
 	border-collapse: separate;
-	border-spacing: 0.75rem;
-	margin: -0.75rem;
+	border-spacing: 1rem;
+	margin: -1rem;
 
 	.title {
 		font-size: 120%;
@@ -25,12 +25,12 @@
 			font-weight: bold;
 			text-align: end;
 			padding-inline-end: 1rem;
-			border-inline-end: 0.15rem solid var(--bg-accent2);
+			border-inline-end: 0.15rem solid var(--bg-dark);
 		}
 
 		.content {
 			text-align: start;
-			padding-block: 0.5rem;
+			padding-block: 0.75rem;
 
 			.name {
 				text-decoration: underline;
@@ -40,12 +40,13 @@
 					display: inline-block;
 					content: "\1f331";
 					margin-left: 0.5rem;
-					filter: drop-shadow(0 0 0.15rem var(--bg-accent2))
+					filter: drop-shadow(0 0 0.15rem var(--bg-dark))
 				}
 			}
 
 			.sides {
 				font-style: italic;
+				color: hsl(from var(--fg-plain) h s 30%);
 				padding-inline-start: 1rem;
 				list-style-type: "\2013";
 				margin: 0.5rem 0 0;

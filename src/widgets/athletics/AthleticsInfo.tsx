@@ -74,14 +74,17 @@ export default function AthleticsInfo({ calendar }: { calendar: AthleticsCalenda
 
 		const tableStyle = getComputedStyle(table)
 		const maxScroll = table.scrollHeight - table.clientHeight
-			+ parseFloat(tableStyle.marginBlockStart)
+			+ parseFloat(tableStyle.marginBlockStart);
 
 		// Will not recalculate if table changes height but
 		// it shouldn't change height between renders anyways
-		const animate = (currentTime: number) => {
-			scrollBeginTime.current ??= currentTime;
-
+		(function animate(currentTime?: number) {
 			(() => {
+				if (currentTime == null)
+					return
+
+				scrollBeginTime.current ??= currentTime;
+
 				if (maxScroll <= 0) {
 					table.scrollTop = 0
 					return
@@ -110,15 +113,13 @@ export default function AthleticsInfo({ calendar }: { calendar: AthleticsCalenda
 			})()
 
 			animationId.current = requestAnimationFrame(animate)
-		}
-
-		animationId.current = requestAnimationFrame(animate)
+		})()
 
 		return () => {
 			if (animationId.current != null)
 				cancelAnimationFrame(animationId.current)
 		}
-	}, [])
+	}, [pauseDuration, scrollSpeed])
 
 	return (
 		<div className="table-wrapper">

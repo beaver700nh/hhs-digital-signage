@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment, { type DurationInputArg2 } from 'moment'
 
 export const DATE_FORMATS = {
 	lastDay: '[Yesterday]',
@@ -93,17 +93,21 @@ export async function fetchCalendarEvents(params: CalendarFetchParameters): Prom
 	}
 }
 
+function ms(magnitude: number, unit: DurationInputArg2) {
+	return moment.duration(magnitude, unit).asMilliseconds()
+}
+
 export const localStorageDefaults = {
 	disableHtmlSchedule: false,
 	disableWidgets: [] as number[],
 	lunchListMax: 5,
 	athleticsListMax: 8,
-	athleticsScrollSpeed: 30,
-	athleticsPauseDuration: 3000,
-	carouselAdvanceInterval: moment.duration(10, 'seconds').asMilliseconds(),
-	carouselRefreshInterval: moment.duration(5, 'minutes').asMilliseconds(),
-	slideshowAdvanceInterval: moment.duration(15, 'seconds').asMilliseconds(),
-	slideshowRefreshInterval: moment.duration(1, 'hour').asMilliseconds(),
+	athleticsScrollSpeed: 40,
+	athleticsPauseDuration: 2000,
+	carouselAdvanceInterval: ms(15, 'seconds'),
+	carouselRefreshInterval: ms(5, 'minutes'),
+	slideshowAdvanceInterval: ms(20, 'seconds'),
+	slideshowRefreshInterval: ms(1, 'hour'),
 }
 
 type LocalStorageSchema = typeof localStorageDefaults

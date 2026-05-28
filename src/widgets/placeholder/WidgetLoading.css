@@ -4,8 +4,8 @@
 	margin: 0;
 	border-radius: 0.5rem;
 	background: var(--fg-accent2);
-	opacity: 0.2;
-	animation: 1s ease-in-out infinite alternate pulse;
+	opacity: 0.33;
+	animation: 1s linear infinite alternate pulse;
 
 	& > * {
 		position: absolute;
@@ -15,11 +15,22 @@
 	}
 }
 
+/**
+ * y = -1/6 * cos(πx) + 1/2
+ *
+ * x(t) = t - 0.02sin(2πt)
+ * y(t) = 0.5 - 0.17cos(πx(t))
+ */
 @keyframes pulse {
-	0%, 50% {
-		opacity: 0.2;
-	}
-	100% {
-		opacity: 0.5;
-	}
+	000.00% { opacity: 0.3300; }
+	008.82% { opacity: 0.3365; }
+	018.10% { opacity: 0.3567; }
+	028.10% { opacity: 0.3920; }
+	038.82% { opacity: 0.4115; }
+	050.00% { opacity: 0.5000; }
+	061.18% { opacity: 0.5585; }
+	071.90% { opacity: 0.6080; }
+	081.90% { opacity: 0.6433; }
+	091.18% { opacity: 0.6635; }
+	100.00% { opacity: 0.6700; }
 }
