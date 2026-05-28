@@ -1,6 +1,7 @@
 import 'material-symbols'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
+import { lookupConfiguration } from '@/data/api'
 import type { AthleticsCalendar, AthleticsEvent } from './parser'
 
 function Event({ event }: { event: Omit<AthleticsEvent, 'when'> }) {
@@ -15,7 +16,7 @@ function Event({ event }: { event: Omit<AthleticsEvent, 'when'> }) {
 	)
 
 	const match = event.opponent != null && (
-		<p className="match" data-homeAway={event.homeAway}>
+		<p className="match">
 			{event.homeAway != null && <>
 				<span className="home-away material-symbols-rounded">
 					{event.homeAway === 'home' ? 'family_home' : 'airport_shuttle'}
@@ -51,72 +52,73 @@ function Event({ event }: { event: Omit<AthleticsEvent, 'when'> }) {
 	)
 }
 
+function scrollEasing(t: number) {
+	if (t < 0) return 0
+	if (t > 1) return 1
+
+	const t2 = t * t
+	return 3 * t2 - 2 * t2*t
+}
+
 export default function AthleticsInfo({ calendar }: { calendar: AthleticsCalendar }) {
 	const tableRef = useRef<HTMLTableElement>(null)
+	const scrollBeginTime = useRef<number>(null)
+	const animationId = useRef<number>(null)
 
-	const easingFunction = useMemo(() => (t: number) => {
-		const t2 = t * t
-		return t2 / (2 * (t2 - t) + 1)
-	}, [])
-
-	const scrollSpeed = 40 // pixels per second
-	const pauseDuration = 3000 // ms to pause at each end
+	const scrollSpeed = lookupConfiguration('athleticsScrollSpeed')
+	const pauseDuration = lookupConfiguration('athleticsPauseDuration')
 
 	useEffect(() => {
 		const table = tableRef.current
 		if (!table) return
 
-		let startTime: number | null = null
+		const tableStyle = getComputedStyle(table)
+		const maxScroll = table.scrollHeight - table.clientHeight
+			+ parseFloat(tableStyle.marginBlockStart)
 
+		// Will not recalculate if table changes height but
+		// it shouldn't change height between renders anyways
 		const animate = (currentTime: number) => {
-			startTime ??= currentTime
+			scrollBeginTime.current ??= currentTime;
 
-			const maxScroll = table.scrollHeight - table.clientHeight
-
-			if (maxScroll <= 0) {
-				table.scrollTop = 0
-			}
-			else {
-				const scrollDuration = maxScroll / scrollSpeed * 1000
-				const cycleDuration = scrollDuration * 2 + pauseDuration * 2
-
-				const elapsed = currentTime - startTime
-				const phaseElapsed = elapsed % cycleDuration
-
-				if (elapsed >= cycleDuration) {
-					startTime = currentTime - phaseElapsed
+			(() => {
+				if (maxScroll <= 0) {
+					table.scrollTop = 0
 					return
 				}
 
-				let scrollPosition: number
+				const scrollDuration = maxScroll / scrollSpeed * 1000
+				const cycleDuration = scrollDuration * 2 + pauseDuration * 2
 
-				if (phaseElapsed < pauseDuration) {
-					scrollPosition = 0
-				}
-				else if (phaseElapsed < pauseDuration + scrollDuration) {
-					const scrollProgress = (phaseElapsed - pauseDuration) / scrollDuration
-					const eased = easingFunction(scrollProgress)
-					scrollPosition = maxScroll * eased
-				}
-				else if (phaseElapsed < pauseDuration * 2 + scrollDuration) {
-					scrollPosition = maxScroll
-				}
-				else {
-					const scrollProgress = (phaseElapsed - pauseDuration * 2 - scrollDuration) / scrollDuration
-					const eased = easingFunction(scrollProgress)
-					scrollPosition = maxScroll * (1 - eased)
+				const elapsed = currentTime - scrollBeginTime.current
+				const phaseElapsed = elapsed % cycleDuration
+
+				if (elapsed >= cycleDuration) {
+					scrollBeginTime.current = currentTime - phaseElapsed
+					return
 				}
 
-				table.scrollTop = scrollPosition
-			}
+				table.scrollTop = (() => {
+					const cutoff = cycleDuration - scrollDuration
 
-			requestAnimationFrame(animate)
+					return maxScroll * (
+						phaseElapsed < cutoff
+							? scrollEasing((phaseElapsed - pauseDuration) / scrollDuration)
+							: 1 - scrollEasing((phaseElapsed - cutoff) / scrollDuration)
+					)
+				})()
+			})()
+
+			animationId.current = requestAnimationFrame(animate)
 		}
 
-		const animationFrameId = requestAnimationFrame(animate)
+		animationId.current = requestAnimationFrame(animate)
 
-		return () => cancelAnimationFrame(animationFrameId)
-	}, [easingFunction])
+		return () => {
+			if (animationId.current != null)
+				cancelAnimationFrame(animationId.current)
+		}
+	}, [])
 
 	return (
 		<div className="table-wrapper">

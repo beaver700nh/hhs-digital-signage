@@ -35,6 +35,8 @@ Source code for signage such as the TV in the lobby. Written by Holliston High S
 
 Set these options in LocalStorage as specified, or remove them completely for the default behavior. Changes take effect on page reload.
 
+See `localStorageDefaults` in `src/data/api.ts` for the default values.
+
 #### `disableHtmlSchedule` (number)
 
 - Forces HTML bell schedules to render as sanitized plain text when set to `1`.
@@ -51,6 +53,14 @@ Set these options in LocalStorage as specified, or remove them completely for th
 #### `athleticsListMax` (number)
 
 - Maximum number of athletics events to show in the athletics widget.
+
+#### `athleticsScrollSpeed` (number)
+
+- Pixels per second to scroll if the athletics list overflows.
+
+#### `athleticsPauseDuration` (number)
+
+- Milliseconds to pause between the athletics list scrolling.
 
 #### `carouselAdvanceInterval` (number)
 

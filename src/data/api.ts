@@ -98,6 +98,8 @@ export const localStorageDefaults = {
 	disableWidgets: [] as number[],
 	lunchListMax: 5,
 	athleticsListMax: 8,
+	athleticsScrollSpeed: 30,
+	athleticsPauseDuration: 3000,
 	carouselAdvanceInterval: moment.duration(10, 'seconds').asMilliseconds(),
 	carouselRefreshInterval: moment.duration(5, 'minutes').asMilliseconds(),
 	slideshowAdvanceInterval: moment.duration(15, 'seconds').asMilliseconds(),
