@@ -35,7 +35,7 @@ Source code for signage such as the TV in the lobby. Written by Holliston High S
 
 Set these options in LocalStorage as specified, or remove them completely for the default behavior. Changes take effect on page reload.
 
-See `localStorageDefaults` in `src/data/api.ts` for the default values.
+See [`localStorageDefaults`](src/data/api.ts#L100) for the default values.
 
 #### `disableHtmlSchedule` (number)
 
