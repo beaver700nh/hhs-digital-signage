@@ -3,7 +3,7 @@ import { useEffect, useRef, useCallback, useState } from 'react'
 import { lookupConfiguration } from '@/data/api'
 
 import ActiveWidgetContext from './widgets/ActiveWidgetContext'
-import Dots from './widgets/Dots'
+import Dots from './widgets/dots/Dots'
 import WidgetWrapper from './widgets/WidgetWrapper'
 import Widgets, { nextWidget } from './widgets/widgets'
 

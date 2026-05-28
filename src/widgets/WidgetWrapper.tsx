@@ -8,7 +8,10 @@ import WidgetLoading from './placeholder/WidgetLoading'
 
 import './WidgetWrapper.css'
 
-export type WidgetRenderer = ComponentType<{ promise: Promise<EventsTypeSchema> }> & CalendarFetchParameters
+export type WidgetRenderer = ComponentType<{
+	index: number,
+	promise: Promise<EventsTypeSchema>,
+}> & CalendarFetchParameters
 
 export default function WidgetWrapper({ index, RendererComponent }: {
 	index: number,
@@ -21,9 +24,8 @@ export default function WidgetWrapper({ index, RendererComponent }: {
 
 	useEffect(() => {
 		const interval = setInterval((function iife() {
-			if (RendererComponent.calendarId != null) {
+			if (RendererComponent.calendarId != null)
 				setPromise(fetchCalendarEvents(RendererComponent))
-			}
 			return iife
 		})(), refreshInterval)
 
@@ -43,7 +45,10 @@ export default function WidgetWrapper({ index, RendererComponent }: {
 			onClick={() => setRefreshKey(Math.random())}
 		>
 			<Suspense fallback={<WidgetLoading />}>
-				<RendererComponent promise={promise ?? new Promise(() => {})} />
+				<RendererComponent
+					index={index}
+					promise={promise ?? new Promise(() => { })}
+				/>
 			</Suspense>
 		</section>
 	)

@@ -102,25 +102,31 @@ export const localStorageDefaults = {
 	disableWidgets: [] as number[],
 	lunchListMax: 5,
 	athleticsListMax: 8,
-	athleticsScrollSpeed: 40,
-	athleticsPauseDuration: 2000,
-	carouselAdvanceInterval: ms(15, 'seconds'),
-	carouselRefreshInterval: ms(5, 'minutes'),
+	calendarScrollSpeed: 50,
+	calendarScrollPause: 3000,
+	carouselAdvanceInterval: ms(20, 'seconds'),
+	carouselRefreshInterval: ms(10, 'minutes'),
 	slideshowAdvanceInterval: ms(20, 'seconds'),
 	slideshowRefreshInterval: ms(1, 'hour'),
 }
 
 type LocalStorageSchema = typeof localStorageDefaults
 
+function checkValidKey(key: string): asserts key is keyof LocalStorageSchema {
+	if (!(key in localStorageDefaults))
+		throw new Error(`Unknown configuration key: '${key}'`)
+}
+
 export function lookupConfiguration<K extends keyof LocalStorageSchema>(key: K) {
-	let value = localStorage.getItem(key) as (LocalStorageSchema[K] | null)
-	let fallback = false
+	checkValidKey(key)
 
-	if (value === null) {
-		fallback = true
-		value = localStorageDefaults[key]
-	}
+	const item = localStorage.getItem(key) as (LocalStorageSchema[K] | null)
 
-	console.info(`Using configuration key '${key}' with value '${value}'${fallback ? ' (fallback)' : ''}`)
+	const value = item ?? localStorageDefaults[key]
+	const fallback = item === null ? ' default' : ''
+
+	console.info(`%cLooked up '${key}', got${fallback} '${value}'`, 'color: #555')
+	// console.trace();
+
 	return value
 }

@@ -1,65 +1,24 @@
-.table-wrapper {
-	margin: 0 1rem;
-	text-align: center;
-	font-size: 150%;
-	max-height: 100%;
-	overflow: clip;
-}
-
-.athletics-calendar {
-	table-layout: fixed;
-	border-collapse: separate;
-	border-spacing: 1rem;
-	margin: -1rem;
-	display: block;
-	max-height: calc(100% + 1rem);
-	overflow-y: scroll;
-	scrollbar-width: none;
-
-	.title {
-		font-size: 120%;
-		color: var(--fg-accent1);
-
+[data-caltab] {
+	th {
 		* {
-			padding-block-end: 0.25rem;
+			margin: 0;
 		}
 
-		th {
-			position: sticky;
-			top: 1rem;
-			background-image: linear-gradient(var(--bg-plain) 80%, transparent);
+		.date {
+			font-weight: bold;
+			font-size: 67%;
+		}
+
+		.time {
+			font-weight: bold;
 		}
 	}
 
-	.time-slot {
-		.when {
-			text-align: end;
-			padding-inline-end: 1rem;
-			border-inline-end: 0.15rem solid var(--bg-dark);
-
-			* {
-				margin: 0;
-			}
-
-			.date {
-				font-weight: bold;
-				font-size: 67%;
-			}
-
-			.time {
-				font-weight: bold;
-			}
-		}
-
-		.events {
-			text-align: start;
-			padding-block: 0.75rem;
-
-			ul {
-				list-style-type: none;
-				padding-inline-start: 0;
-				margin-block: 0;
-			}
+	td {
+		ul {
+			list-style-type: none;
+			padding-inline-start: 0;
+			margin-block: 0;
 		}
 
 		.event {

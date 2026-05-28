@@ -11,7 +11,7 @@
 
 	transition:
 		opacity 0.5s ease-out,
-		transform 1.0s ease-out;
+		transform 1.0s ease;
 
 	&.inbound {
 		transform: translateX(100%);

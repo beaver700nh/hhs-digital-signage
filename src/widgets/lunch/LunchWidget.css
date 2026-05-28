@@ -1,61 +1,27 @@
-.table-wrapper {
-	margin: 0 1rem;
-	text-align: center;
-	font-size: 150%;
-	overflow: clip;
-}
+[data-caltab] {
+	td {
+		.name {
+			text-decoration: underline;
+			text-decoration-color: var(--fg-accent2);
 
-.lunch-info {
-	table-layout: fixed;
-	border-collapse: separate;
-	border-spacing: 1rem;
-	margin: -1rem;
-
-	.title {
-		font-size: 120%;
-		color: var(--fg-accent1);
-
-		* {
-			padding-block-end: 0.25rem;
-		}
-	}
-
-	.day-lunch {
-		.day {
-			font-weight: bold;
-			text-align: end;
-			padding-inline-end: 1rem;
-			border-inline-end: 0.15rem solid var(--bg-dark);
-		}
-
-		.content {
-			text-align: start;
-			padding-block: 0.75rem;
-
-			.name {
-				text-decoration: underline;
-				text-decoration-color: var(--fg-accent2);
-
-				[data-vegetarian="true"] &::after {
-					display: inline-block;
-					content: "\1f331";
-					margin-left: 0.5rem;
-					filter: drop-shadow(0 0 0.15rem var(--bg-dark))
-				}
+			[data-vegetarian="true"] &::after {
+				display: inline-block;
+				content: "\1f331";
+				margin-left: 0.5rem;
 			}
+		}
 
-			.sides {
-				font-style: italic;
-				color: hsl(from var(--fg-plain) h s 30%);
-				padding-inline-start: 1rem;
-				list-style-type: "\2013";
-				margin: 0.5rem 0 0;
+		.sides {
+			font-style: italic;
+			color: hsl(from var(--fg-plain) h s 30%);
+			padding-inline-start: 1rem;
+			list-style-type: "\2013";
+			margin: 0.5rem 0 0;
 
-				& > * {
-					margin-block-start: 0.25rem;
-					padding-inline-start: 0.25rem;
-					font-size: 80%;
-				}
+			& > * {
+				margin-block-start: 0.25rem;
+				padding-inline-start: 0.25rem;
+				font-size: 80%;
 			}
 		}
 	}
