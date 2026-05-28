@@ -57,23 +57,26 @@ See `localStorageDefaults` in `src/data/api.ts` for the default values.
 #### `athleticsScrollSpeed` (number)
 
 - Pixels per second to scroll if the athletics list overflows.
+- Only applies when the list is long enough to scroll.
 
 #### `athleticsPauseDuration` (number)
 
 - Milliseconds to pause between the athletics list scrolling.
+- Only applies when the list is long enough to scroll.
 
 #### `carouselAdvanceInterval` (number)
 
-- Milliseconds it takes for the carousel to advance
+- Milliseconds it takes before the carousel advances to the next widget.
 
 #### `carouselRefreshInterval` (number)
 
-- Milliseconds it takes for carousel widgets to reload
+- Milliseconds between reloads of each carousel widget.
 
 #### `slideshowAdvanceInterval` (number)
 
-- Milliseconds it takes for the slideshow to advance
+- Milliseconds it takes before the slideshow advances to the next slide.
 
 #### `slideshowRefreshInterval` (number)
 
-- Milliseconds it takes for the slideshow embed to reload
+- Milliseconds between reloads of the slideshow embed.
+- Upstream changes will only be reflected after this reload occurs.
