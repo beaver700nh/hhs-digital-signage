@@ -45,17 +45,21 @@ export interface CalendarFetchParameters {
 }
 
 const API_KEY = import.meta.env.VITE_GAPI_KEY
+	?? new URLSearchParams(window.location.search).get('gapikey')
 
 export async function fetchCalendarEvents(params: CalendarFetchParameters): Promise<EventsTypeSchema> {
+	if (API_KEY == null)
+		return {
+			success: false,
+			error: new Error('Missing Google API key.')
+		}
+
 	const url = new URL(`https://www.googleapis.com/calendar/v3/calendars/${params.calendarId}/events`)
 
 	const override = (window as { DATE_OVERRIDE?: string }).DATE_OVERRIDE
 
 	if (override != null)
 		console.warn(`Using date override ${override} for Google Calendar API requests`)
-
-	// Debug: Makes it load forever
-	// return new Promise(() => {})
 
 	if (params.config != null)
 		console.info(`This calendar has a special configuration: ${JSON.stringify(params.config)}`)
