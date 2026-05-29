@@ -66,36 +66,38 @@
 }
 
 .hiatus {
-	display: flex;
-	flex-flow: column nowrap;
-	gap: 0.5rem;
-	font-size: 150%;
-
-	* {
-		margin: 0;
-	}
-
 	*:empty {
 		display: none;
 	}
 
-	.wishes {
-		color: var(--fg-accent1);
-		text-decoration: underline;
-		font-style: italic;
-		font-size: 80%;
+	th {
+		font-weight: normal;
 	}
 
-	ul {
+	.wishes {
+		padding-block-start: 1.5rem;
+		color: var(--fg-accent1);
+		font-style: italic;
+		font-size: 80%;
+		text-decoration: underline;
+		text-decoration-color: var(--bg-dark);
+	}
+
+	.names ul {
 		list-style-type: none;
 		text-align: center;
-		padding: 0;
+		margin: 0;
+		padding: 1rem 0;
 
-		li::before,
-		li::after {
-			content: '\2014';
-			color: var(--fg-accent2);
-			margin: 0 0.5rem;
+		li:not(:nth-last-child(-n + 2))::after {
+			content: ',';
+			color: var(--bg-dark);
+		}
+
+		li:last-child:not(:first-child)::before {
+			content: '&';
+			color: var(--bg-dark);
+			margin-inline-end: 0.4rem;
 		}
 	}
 }

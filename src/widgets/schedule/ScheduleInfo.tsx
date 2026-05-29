@@ -1,9 +1,12 @@
 import * as Regex from './regex'
-import type { BellSchedule } from './parser'
+import type { NextDaySchedule } from './parser'
 
 import CalendarTable from '../table/CalendarTable'
+import Hiatus from './Hiatus'
 
-export default function BellSchedule({ schedule }: { schedule: BellSchedule }) {
+export default function ScheduleInfo({ data }: { data: NextDaySchedule }) {
+	const schedule = data.schedule!
+
 	switch (schedule.type) {
 	case 'none':
 		return (
@@ -22,7 +25,11 @@ export default function BellSchedule({ schedule }: { schedule: BellSchedule }) {
 		)
 	case 'table':
 		return (
-			<CalendarTable title="Bell Schedule:">
+			<CalendarTable title="Bell Schedule:" extras={
+				<tfoot className="hiatus">
+					<Hiatus hiatus={data.hiatus} />
+				</tfoot>
+			}>
 				{schedule.data.map((line, index) =>
 					<tr
 						key={index}

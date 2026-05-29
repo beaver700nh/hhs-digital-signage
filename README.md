@@ -31,6 +31,8 @@ Source code for signage such as the TV in the lobby. Written by Holliston High S
 
 - Shows upcoming sports games with time, teams, and location
 
+<!-- TODO add explanations of all features, especially edge cases -->
+
 ## Configuration
 
 Set these options in LocalStorage as specified, or remove them completely for the default behavior. Changes take effect on page reload.

@@ -10,7 +10,14 @@ export const DATE_FORMATS = {
 	sameElse: 'MMM Do',
 }
 
-export type EventsTypeSchema = {
+export interface EventsFailure {
+	success: false
+	error: {
+		message: string
+	}
+}
+
+export interface EventsSuccess {
 	success: true
 	summary: string
 	timeZone: string
@@ -26,12 +33,9 @@ export type EventsTypeSchema = {
 			dateTime: string
 		}
 	}[]
-} | {
-	success: false
-	error: {
-		message: string
-	}
 }
+
+export type EventsTypeSchema = EventsFailure | EventsSuccess
 
 export interface CalendarFetchParameters {
 	calendarId?: string
@@ -78,8 +82,8 @@ export async function fetchCalendarEvents(params: CalendarFetchParameters): Prom
 		const data = await response.json() as EventsTypeSchema
 
 		if (!response.ok) {
-			const error = data as EventsTypeSchema & { success: false }
-			throw new Error(`Google Calendar API returned ${response.status} ${error.error.message}`)
+			const message = (data as EventsFailure).error.message
+			throw new Error(`Google Calendar API returned ${response.status} ${message}`)
 		}
 
 		data.success = true

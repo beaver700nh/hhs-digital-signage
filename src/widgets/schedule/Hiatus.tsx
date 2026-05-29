@@ -1,8 +1,6 @@
 import type { NextDaySchedule } from './parser'
 
-export default function Hiatus({ hiatus }:
-	Pick<NextDaySchedule, 'hiatus'>
-) {
+export default function Hiatus({ hiatus }: Pick<NextDaySchedule, 'hiatus'>) {
 	if (hiatus == null)
 		return null
 
@@ -20,12 +18,21 @@ export default function Hiatus({ hiatus }:
 		.filter(Boolean)
 		.join(' and ')
 
+	const message = wishes.charAt(0).toUpperCase() + wishes.slice(1) + '!'
+
 	return (
-		<div className="hiatus">
-			<p className="wishes">{wishes.charAt(0).toUpperCase() + wishes.slice(1)}!</p>
-			<ul>
-				{hiatus.names.map((item, index) => <li key={index}>{item}</li>)}
-			</ul>
-		</div>
+		<>
+			<tr>
+				<th colSpan={2} className="wishes">{message}</th>
+			</tr>
+			<tr>
+				<th colSpan={2} className="names">
+					<ul>
+						{hiatus.names.map((item, index) =>
+							<li key={index}>{item}</li>)}
+					</ul>
+				</th>
+			</tr>
+		</>
 	)
 }

@@ -21,8 +21,9 @@ function Widget({ promise }: {
 
 	return (
 		parsed == null ?
-			<WidgetError message={(data as EventsTypeSchema & { success: false }).error.message
-				?? "No schedule information found."} /> :
+			<WidgetError message={data.success
+				? "No schedule information found."
+				: data.error.message} /> :
 		<>
 			<Letter header={parsed.header} />
 			<Headlines when={parsed.when} header={parsed.header} />

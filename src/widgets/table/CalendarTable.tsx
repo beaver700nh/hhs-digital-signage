@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useRef, type PropsWithChildren } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
+import type { PropsWithChildren, ReactNode } from 'react'
 
 import { lookupConfiguration } from '@/data/api'
 
@@ -16,8 +17,10 @@ function scrollEasing(t: number) {
 export default function CalendarTable({
 	children,
 	title,
+	extras,
 }: PropsWithChildren<{
 	title: string
+	extras?: ReactNode
 }>) {
 	const cleanTitle = title.replaceAll(/\W/g, '')
 
@@ -102,6 +105,7 @@ export default function CalendarTable({
 				<tbody data-caltab>
 					{children}
 				</tbody>
+				{extras}
 			</table>
 		</div>
 	)

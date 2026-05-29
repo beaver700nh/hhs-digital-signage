@@ -1,6 +1,6 @@
 import { use, useMemo } from 'react'
 
-import type { EventsTypeSchema } from '@/data/api'
+import type { EventsFailure } from '@/data/api'
 
 import type { WidgetRenderer } from '../WidgetWrapper'
 import parseLunch from './parser'
@@ -14,9 +14,10 @@ const LunchWidget: WidgetRenderer = ({ promise }) => {
 	const parsed = useMemo(() => data.success ? parseLunch(data) : null, [data])
 
 	return (
-		parsed == null || parsed.length === 0 ?
-			<WidgetError message={(data as EventsTypeSchema & { success: false }).error.message
-				?? "No lunch information found."} /> :
+		parsed == null ?
+			<WidgetError message={(data as EventsFailure).error.message} /> :
+		parsed.length === 0 ?
+			<WidgetError message={"No lunch information found."} /> :
 		<>
 			<LunchInfo lunches={parsed} />
 		</>

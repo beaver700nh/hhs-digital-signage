@@ -1,6 +1,6 @@
 import { use, useMemo } from 'react'
 
-import type { EventsTypeSchema } from '@/data/api'
+import type { EventsFailure } from '@/data/api'
 
 import type { WidgetRenderer } from '../WidgetWrapper'
 import parseAthletics from './parser'
@@ -15,8 +15,9 @@ const AthleticsWidget: WidgetRenderer = ({ promise }) => {
 
 	return (
 		parsed == null ?
-			<WidgetError message={(data as EventsTypeSchema & { success: false }).error.message
-				?? "No athletics information found."} /> :
+			<WidgetError message={(data as EventsFailure).error.message} /> :
+		Object.keys(parsed).length === 0 ?
+			<WidgetError message={"No athletics information found."} /> :
 		<>
 			<AthleticsInfo calendar={parsed} />
 		</>
