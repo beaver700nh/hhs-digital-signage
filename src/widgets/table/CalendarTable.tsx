@@ -1,4 +1,4 @@
-import { useEffect, useRef, type PropsWithChildren } from 'react'
+import { useCallback, useEffect, useRef, type PropsWithChildren } from 'react'
 
 import { lookupConfiguration } from '@/data/api'
 
@@ -19,7 +19,7 @@ export default function CalendarTable({
 }: PropsWithChildren<{
 	title: string
 }>) {
-	console.info(`CalendarTable '${title}' rendered`)
+	const cleanTitle = title.replaceAll(/\W/g, '')
 
 	const tableRef = useRef<HTMLTableElement>(null)
 	const scrollBeginTime = useRef<number>(null)
@@ -28,69 +28,71 @@ export default function CalendarTable({
 	const scrollSpeed = lookupConfiguration('calendarScrollSpeed')
 	const pauseDuration = lookupConfiguration('calendarScrollPause')
 
-	useEffect(() => {
-		// Will not recalculate if the table changes height but
-		// it shouldn't change height between renders anyways
-		(function animate(currentTime?: number) {
-			const table = tableRef.current
-			if (!table) return
+	console.info(`CalendarTable '${cleanTitle}' rendered`)
 
-			(() => {
-				if (currentTime == null)
-					return
+	const scroll = useCallback((maxScroll: number, currentTime: number) => {
+		scrollBeginTime.current ??= currentTime
 
-				scrollBeginTime.current ??= currentTime;
+		const scrollDuration = maxScroll / scrollSpeed * 1000
+		const cycleDuration = 2 * (scrollDuration + pauseDuration)
 
-				const tableStyle = getComputedStyle(table)
+		const elapsed = currentTime - scrollBeginTime.current
+		const phaseElapsed = elapsed % cycleDuration
 
-				// TODO fix because opacity is always 1 for some reason
-				// Unfocused widgets are hidden
-				if (tableStyle.opacity === '0') {
-					console.info('CalendarTable skipping animation because not focused')
-					return
-				}
+		if (elapsed >= cycleDuration) {
+			scrollBeginTime.current = currentTime - phaseElapsed
+		}
 
-				const maxScroll = table.scrollHeight - table.clientHeight
-					+ parseFloat(tableStyle.marginBlockStart);
+		return (() => {
+			const cutoff = cycleDuration - scrollDuration
 
-				if (maxScroll <= 0) {
-					table.scrollTop = 0
-					return
-				}
-
-				const scrollDuration = maxScroll / scrollSpeed * 1000
-				const cycleDuration = scrollDuration * 2 + pauseDuration * 2
-
-				const elapsed = currentTime - scrollBeginTime.current
-				const phaseElapsed = elapsed % cycleDuration
-
-				if (elapsed >= cycleDuration) {
-					scrollBeginTime.current = currentTime - phaseElapsed
-					return
-				}
-
-				table.scrollTop = (() => {
-					const cutoff = cycleDuration - scrollDuration
-
-					return maxScroll * (
-						phaseElapsed < cutoff
-							? scrollEasing((phaseElapsed - pauseDuration) / scrollDuration)
-							: 1 - scrollEasing((phaseElapsed - cutoff) / scrollDuration)
-					)
-				})()
-			})()
-
-			animationId.current = requestAnimationFrame(animate)
+			return maxScroll * (
+				phaseElapsed < cutoff
+					? scrollEasing((phaseElapsed - pauseDuration) / scrollDuration)
+					: 1 - scrollEasing((phaseElapsed - cutoff) / scrollDuration)
+			)
 		})()
+	}, [pauseDuration, scrollSpeed])
+
+	const animate = useCallback((currentTime: number) => {
+		const table = tableRef.current
+
+		if (table == null)
+			return
+
+		// Unfocused widgets are hidden
+		if (getComputedStyle(table).getPropertyValue('--focused') !== '1') {
+			console.log(`CalendarTable '${cleanTitle}' isn't focused so won't animate`)
+			return
+		}
+
+		const maxScroll = table.scrollHeight - table.clientHeight
+
+		if (maxScroll <= 0) {
+			console.log(`CalendarTable '${cleanTitle}' isn't tall enough to animate`)
+			table.scrollTop = 0
+			return
+		}
+
+		table.scrollTop = scroll(maxScroll, currentTime)
+
+		animationId.current = requestAnimationFrame(animate);
+	}, [scroll, cleanTitle])
+
+	useEffect(() => {
+		// Reset scroll on every render
+		scrollBeginTime.current = null;
+
+		animationId.current = requestAnimationFrame(animate)
 
 		return () => {
 			if (animationId.current != null)
 				cancelAnimationFrame(animationId.current)
 		}
-	}, [pauseDuration, scrollSpeed])
+	})
 
 	return (
-		<div className="table-wrapper">
+		<div className={`table-wrapper caltab-${cleanTitle}`}>
 			<table ref={tableRef}>
 				<thead>
 					<tr>

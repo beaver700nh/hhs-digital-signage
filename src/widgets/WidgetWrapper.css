@@ -20,6 +20,7 @@
 	&.focused {
 		transform: translateX(0%);
 		opacity: 1;
+		--focused: 1;
 	}
 	&.outbound {
 		transform: translateX(-100%);

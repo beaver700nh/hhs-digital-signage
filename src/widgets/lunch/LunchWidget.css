@@ -1,4 +1,4 @@
-[data-caltab] {
+.caltab-UpcomingLunch [data-caltab] {
 	td {
 		.name {
 			text-decoration: underline;

@@ -100,9 +100,10 @@ function ms(magnitude: number, unit: DurationInputArg2) {
 export const localStorageDefaults = {
 	disableHtmlSchedule: false,
 	disableWidgets: [] as number[],
-	lunchListMax: 5,
+	bellScheduleSize: 1.5,
+	lunchListMax: 7,
 	athleticsListMax: 8,
-	calendarScrollSpeed: 50,
+	calendarScrollSpeed: 67,
 	calendarScrollPause: 3000,
 	carouselAdvanceInterval: ms(20, 'seconds'),
 	carouselRefreshInterval: ms(10, 'minutes'),

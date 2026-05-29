@@ -1,17 +1,4 @@
 .bell-sched {
-	margin: 0 1rem;
-	text-align: center;
-	font-size: 150%;
-
-	.title {
-		font-size: 120%;
-		color: var(--fg-accent1);
-
-		* {
-			padding-block-end: 1rem;
-		}
-	}
-
 	&.none {
 		text-decoration: underline;
 	}
@@ -24,45 +11,54 @@
 	&.text > * {
 		margin-block: 0 0.5rem;
 	}
+}
 
-	&.table {
-		table-layout: fixed;
-		border-collapse: collapse;
+/* Whole mess of corrections to remove border spacing */
+.caltab-BellSchedule table {
+	border-collapse: collapse !important;
+	border-spacing: 0 !important;
+	margin: 0 !important;
+	max-height: 100% !important;
 
-		.line {
-			& > * {
-				padding-block: 0.75rem;
-			}
-			& > :first-child {
-				text-align: end;
-				padding-inline-end: 2rem;
-				border-inline-end: 0.15rem solid var(--bg-dark);
-			}
-			& > :last-child {
-				text-align: start;
-				padding-inline-start: 2rem;
-				color: var(--bg-accent2);
-				font-weight: bold;
-				font-size: 120%;
-			}
+	thead th {
+		top: 0 !important;
+		padding-block-end: 1rem;
+		background-image: linear-gradient(
+			var(--bg-plain) calc(80% - 1rem),
+			transparent calc(100% - 1rem)
+		) !important;
+	}
+}
+
+.caltab-BellSchedule [data-caltab] {
+	tr[data-lunch] {
+		font-style: italic;
+		font-size: 80%;
+
+		th, td {
+			color: hsl(from var(--fg-plain) h s 40%);
+		}
+	}
+
+	th {
+		font-weight: normal !important;
+		padding-inline-end: 2rem;
+	}
+
+	td {
+		color: var(--bg-accent2);
+		font-weight: bold;
+		font-size: 120%;
+		padding-inline-start: 2rem;
+		padding-block: 0.5rem !important;
+
+		[data-lunch] > & {
+			padding-inline-start: 3rem;
+			font-weight: normal;
+			text-transform: capitalize;
 		}
 
-		.line[data-lunch] {
-			font-style: italic;
-			font-size: 80%;
-
-			& > * {
-				color: hsl(from var(--fg-plain) h s 40%);
-			}
-
-			& > :last-child {
-				padding-inline-start: 3rem;
-				font-weight: normal;
-				text-transform: capitalize;
-			}
-		}
-
-		.line[data-class] :last-child {
+		[data-class] > & {
 			text-decoration: underline;
 			text-decoration-color: var(--fg-accent2);
 		}

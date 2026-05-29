@@ -46,6 +46,10 @@ See [`localStorageDefaults`](src/data/api.ts#L100) for the default values.
 - Removes the specified widgets (zero-indexed) from the carousel.
 - For example, `[0, 2]` will hide the first and third widgets.
 
+#### `bellScheduleSize` (number)
+
+- Font size multiplier for the bell schedule widget.
+
 #### `lunchListMax` (number)
 
 - Maximum number of daily menus to show in the lunch widget.
@@ -54,14 +58,15 @@ See [`localStorageDefaults`](src/data/api.ts#L100) for the default values.
 
 - Maximum number of athletics events to show in the athletics widget.
 
-#### `athleticsScrollSpeed` (number)
+#### `calendarScrollSpeed` (number)
 
-- Pixels per second to scroll if the athletics list overflows.
+- Average pixels per second to scroll if a widget with a list overflows.
+- Scroll speed may momentarily exceed this value to compensate for time spent on easing.
 - Only applies when the list is long enough to scroll.
 
-#### `athleticsPauseDuration` (number)
+#### `calendarScrollPause` (number)
 
-- Milliseconds to pause between the athletics list scrolling.
+- Milliseconds to pause between the widget lists' scrolling.
 - Only applies when the list is long enough to scroll.
 
 #### `carouselAdvanceInterval` (number)
