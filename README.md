@@ -72,7 +72,7 @@ Shows the following widgets in a cycle, scrolling horizontally at an interval. T
 
 Set these options in LocalStorage as specified, or remove them completely for the default behavior. You may need to reload a widget or the whole page for changes to take effect.
 
-See [`localStorageDefaults` in the code](src/data/api.ts#L100) for the default values.
+See [`localStorageDefaults` in the code](src/data/api.ts#L116) for the default values.
 
 | Parameter                  | Type            | Description |
 | -------------------------- | --------------- | ----------- |
