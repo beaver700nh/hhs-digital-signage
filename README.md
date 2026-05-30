@@ -2,7 +2,7 @@
 
 Source code for signage such as the TV in the lobby. Written by Holliston High School student Minh Le ('26).
 
-This page shows general information about the app interface. For maintenance information, see [SYSADMIN.md](documentation/SYSADMIN.md#maintenance).
+This page shows general information about the app interface. For maintenance information, see [SYSADMIN.md](documentation/SYSADMIN.md#Maintenance).
 
 ## Google Calendar API
 
@@ -16,7 +16,7 @@ https://<address>/?gapikey=XXXXX
 
 The app fetches data from several calendars and formats them nicely, but in order to do so it makes some assumptions about the original format of the data.
 
-See [SYSADMIN.md](documentation/SYSADMIN.md#data-guidelines) for specific guidelines.
+See [SYSADMIN.md](documentation/SYSADMIN.md#Data-Guidelines) for specific guidelines.
 
 ## Widgets
 
