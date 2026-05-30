@@ -65,9 +65,17 @@ export async function fetchCalendarEvents(params: CalendarFetchParameters): Prom
 		console.info(`This calendar has a special configuration: ${JSON.stringify(params.config)}`)
 
 	const start = moment(override ?? undefined)
-	// Begin querying the next day at 5pm (17:00 + 7h = midnight)
+	let offset = lookupConfiguration('dayRolloverTime')
+
+	if (offset < 0 || offset > 24) {
+		console.warn(`Invalid day rollover time: ${offset}.`)
+		offset = 24 // Don't rollover at all, because it's never 24:00
+	}
+
+	// e.g. offset = 17 (5pm)
+	// 17 + 7 = 24, so if we add 7 hours it will look at tomorrow at 5pm
 	if (!params.config?.useLiveTiming)
-		start.add(7, 'hours')
+		start.add(24 - offset, 'hours')
 
 	const timeMin = start.toISOString()
 
@@ -106,6 +114,7 @@ function ms(magnitude: number, unit: DurationInputArg2) {
 }
 
 export const localStorageDefaults = {
+	dayRolloverTime: 17,
 	disableHtmlSchedule: false,
 	disableWidgets: [] as number[],
 	bellScheduleSize: 1.5,
