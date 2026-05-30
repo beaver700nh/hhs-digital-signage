@@ -2,6 +2,10 @@ name: Deploy to GitHub Pages
 
 on: workflow_dispatch
 
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -14,7 +18,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 26
+          node-version: latest
       - name: Install dependencies
         run: npm ci
       - name: Build website
