@@ -51,9 +51,11 @@ export default function Header() {
 			id="header"
 			onClick={() => setRefreshKey(Math.random())}
 		>
-			<Suspense fallback={<WidgetLoading />}>
-				<Widget promise={promise ?? new Promise(() => {})} />
-			</Suspense>
+			<section className="wrapper">
+				<Suspense fallback={<WidgetLoading />}>
+					<Widget promise={promise ?? new Promise(() => {})} />
+				</Suspense>
+			</section>
 		</article>
 	)
 }

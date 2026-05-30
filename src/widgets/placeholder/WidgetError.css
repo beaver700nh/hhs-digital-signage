@@ -11,6 +11,7 @@
 	border: 0.25rem solid var(--fg-accent2);
 	border-radius: 1rem;
 	box-shadow: 0 0 2rem black;
+	max-width: 67%;
 
 	& > * {
 		margin: 0;
