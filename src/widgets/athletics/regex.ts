@@ -1,7 +1,7 @@
 /**
  * For normalizing "High", "High School", and "HS" to the same format
  */
-export const HIGH_SCHOOL = /([\w\s-]+)\s+(?:high(?:\s+school)?|hs)\b/i
+export const HIGH_SCHOOL = /([\w\s-]+)\s+(?:high(?:\s+school)?|h\.?\s*s\.?)\b/i
 
 /**
  * Redundant "team":

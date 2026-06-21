@@ -1,4 +1,6 @@
-import moment, { type DurationInputArg2 } from 'moment'
+import moment from 'moment'
+
+import { lookupConfiguration } from './config'
 
 export const DATE_FORMATS = {
 	lastDay: '[Yesterday]',
@@ -45,10 +47,10 @@ export interface CalendarFetchParameters {
 }
 
 const API_KEY = import.meta.env.VITE_GAPI_KEY
-	?? new URLSearchParams(window.location.search).get('gapikey')
+	?? lookupConfiguration('gapiKey')
 
 export async function fetchCalendarEvents(params: CalendarFetchParameters): Promise<EventsTypeSchema> {
-	if (API_KEY == null)
+	if (!API_KEY)
 		return {
 			success: false,
 			error: new Error('Missing Google API key.')
@@ -56,7 +58,7 @@ export async function fetchCalendarEvents(params: CalendarFetchParameters): Prom
 
 	const url = new URL(`https://www.googleapis.com/calendar/v3/calendars/${params.calendarId}/events`)
 
-	const override = (window as { DATE_OVERRIDE?: string }).DATE_OVERRIDE
+	const override = (window as { __DATE_OVERRIDE?: string }).__DATE_OVERRIDE
 
 	if (override != null)
 		console.warn(`Using date override ${override} for Google Calendar API requests`)
@@ -107,44 +109,4 @@ export async function fetchCalendarEvents(params: CalendarFetchParameters): Prom
 			error: error as Error
 		}
 	}
-}
-
-function ms(magnitude: number, unit: DurationInputArg2) {
-	return moment.duration(magnitude, unit).asMilliseconds()
-}
-
-export const localStorageDefaults = {
-	dayRolloverTime: 17,
-	disableHtmlSchedule: false,
-	disableWidgets: [] as number[],
-	bellScheduleSize: 1.5,
-	lunchListMax: 7,
-	athleticsListMax: 8,
-	calendarScrollSpeed: 67,
-	calendarScrollPause: 3000,
-	carouselAdvanceInterval: ms(20, 'seconds'),
-	carouselRefreshInterval: ms(10, 'minutes'),
-	slideshowAdvanceInterval: ms(20, 'seconds'),
-	slideshowRefreshInterval: ms(1, 'hour'),
-}
-
-type LocalStorageSchema = typeof localStorageDefaults
-
-function checkValidKey(key: string): asserts key is keyof LocalStorageSchema {
-	if (!(key in localStorageDefaults))
-		throw new Error(`Unknown configuration key: '${key}'`)
-}
-
-export function lookupConfiguration<K extends keyof LocalStorageSchema>(key: K) {
-	checkValidKey(key)
-
-	const item = localStorage.getItem(key) as (LocalStorageSchema[K] | null)
-
-	const value = item ?? localStorageDefaults[key]
-	const fallback = item === null ? ' default' : ''
-
-	console.info(`%cLooked up '${key}', got${fallback} '${value}'`, 'color: #555')
-	// console.trace();
-
-	return value
 }

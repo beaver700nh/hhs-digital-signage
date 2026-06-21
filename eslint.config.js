@@ -26,7 +26,7 @@ export default defineConfig([
 			'react-x/no-array-index-key': 'off',
     },
     languageOptions: {
-      ecmaVersion: 2020,
+      ecmaVersion: 'latest',
       globals: globals.browser,
       parserOptions: {
         project: ['./tsconfig.node.json', './tsconfig.app.json'],
