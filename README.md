@@ -6,10 +6,23 @@ This page shows general information about the app interface. For maintenance inf
 
 ## Google Calendar API
 
-First, a quick note about the Google Calendar API. Remember to pass your API key as the `gapikey` query parameter when loading the app:
+First, a quick note about the Google Calendar API.
+
+The app needs an API key, which can be set in the configuration as `gapikey`. There are multiple methods; for example, set it in `localStorage` or include it as a query parameter. [See below](#configuration) for more details on configuration.
 
 ```
-https://<address>/?gapikey=XXXXX
+DevTools > Storage > Local Storage > (hosted domain)
+----------------------------------------------------
+Key: gapikey
+Value: XXXXX
+```
+```
+DevTools > Console
+------------------
+> __EXPORT_CONFIG({ gapikey: 'XXXXX' })
+##########
+
+[https://<address>/?config=##########]
 ```
 
 ### Expected Data Format
@@ -72,7 +85,23 @@ Shows the following widgets in a cycle, scrolling horizontally at an interval. T
 
 Set these options in LocalStorage as specified, or remove them completely for the default behavior. You may need to reload a widget or the whole page for changes to take effect.
 
-See [`localStorageDefaults` in the code](src/data/api.ts#L116) for the default values.
+See [`localStorageDefaults` in the code](src/data/config.ts#L30) for the default values.
+
+To support environments where LocalStorage is unavailable, the app also accepts configuration as base64-encoded JSON in the `config` query parameter. For convenience, a helper function is exposed in the DevTools console to export a configuration object in this format:
+
+```js
+> __EXPORT_CONFIG({
+  	key: value,
+  	// ...
+  })
+##########
+```
+
+This will take provided configuration, followed by the configuration currently in the query parameter (if any), followed by the configuration in LocalStorage (if any), and merge them together in that order of importance. The printed output may then be passed as the value of `config` in the URL.
+
+```
+https://<address>/?config=##########
+```
 
 | Parameter                  | Type            | Description |
 | -------------------------- | --------------- | ----------- |
