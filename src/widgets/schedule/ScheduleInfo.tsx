@@ -9,6 +9,7 @@ export default function ScheduleInfo({ data }: { data: NextDaySchedule }) {
 
 	switch (schedule.type) {
 	case 'none':
+		// This case should never be reached
 		return (
 			<p className="bell-sched none">No bell schedule listed.</p>
 		)

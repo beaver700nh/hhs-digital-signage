@@ -1,4 +1,4 @@
-import { lookupConfiguration } from '@/data/api'
+import { lookupConfiguration } from '@/data/config'
 
 // import PlaceholderWidget from './placeholder/PlaceholderWidget'
 import ScheduleWidget from './schedule/ScheduleWidget'

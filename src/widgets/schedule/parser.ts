@@ -1,6 +1,7 @@
 import moment from 'moment'
 
-import { lookupConfiguration, type EventsTypeSchema } from '@/data/api'
+import type { EventsTypeSchema } from '@/data/api'
+import { lookupConfiguration } from '@/data/config'
 import * as Regex from './regex'
 
 export type ScheduleHeader = {

@@ -12,7 +12,7 @@ const ScheduleWidget: WidgetRenderer = ({ promise }) => {
 	const parsed = useMemo(() => data.success ? parseSchedule(data, true) : null, [data])
 
 	return (
-		parsed == null ?
+		parsed == null || parsed.schedule?.type === "none" ?
 			<WidgetError message={data.success
 				? "No schedule information found."
 				: data.error.message} /> :

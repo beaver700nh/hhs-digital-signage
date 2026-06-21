@@ -1,6 +1,7 @@
 import { useEffect, useState, use, Suspense, type ComponentType } from 'react'
 
-import { fetchCalendarEvents, lookupConfiguration, type EventsTypeSchema, type CalendarFetchParameters } from '@/data/api'
+import { fetchCalendarEvents, type EventsTypeSchema, type CalendarFetchParameters } from '@/data/api'
+import { lookupConfiguration } from '@/data/config'
 
 import ActiveWidgetContext from '@/widgets/ActiveWidgetContext'
 import { nextWidget, prevWidget } from './widgets'

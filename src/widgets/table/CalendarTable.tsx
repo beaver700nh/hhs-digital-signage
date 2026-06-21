@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 import type { PropsWithChildren, ReactNode } from 'react'
 
-import { lookupConfiguration } from '@/data/api'
+import { lookupConfiguration } from '@/data/config'
 
 import './CalendarTable.css'
 

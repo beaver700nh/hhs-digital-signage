@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { lookupConfiguration } from './data/api'
+import { lookupConfiguration } from './data/config'
 
 import './Slideshow.css'
 

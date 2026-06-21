@@ -1,6 +1,6 @@
 import { useEffect, useRef, useCallback, useState } from 'react'
 
-import { lookupConfiguration } from '@/data/api'
+import { lookupConfiguration } from '@/data/config'
 
 import ActiveWidgetContext from './widgets/ActiveWidgetContext'
 import Dots from './widgets/dots/Dots'
