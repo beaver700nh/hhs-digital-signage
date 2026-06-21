@@ -85,7 +85,7 @@ Shows the following widgets in a cycle, scrolling horizontally at an interval. T
 
 Set these options in LocalStorage as specified, or remove them completely for the default behavior. You may need to reload a widget or the whole page for changes to take effect.
 
-See [`localStorageDefaults` in the code](src/data/config.ts#L30) for the default values.
+See [`localStorageDefaults` in the code](src/data/config.ts#L9) for the default values.
 
 To support environments where LocalStorage is unavailable, the app also accepts configuration as base64-encoded JSON in the `config` query parameter. For convenience, a helper function is exposed in the DevTools console to export a configuration object in this format:
 
@@ -97,11 +97,19 @@ To support environments where LocalStorage is unavailable, the app also accepts 
 ##########
 ```
 
-This will take provided configuration, followed by the configuration currently in the query parameter (if any), followed by the configuration in LocalStorage (if any), and merge them together in that order of importance. The printed output may then be passed as the value of `config` in the URL.
+This will take configuration you typed and merge it on top of the currently running configuration. The printed output may then be passed as the value of `config` in the URL.
 
 ```
 https://<address>/?config=##########
 ```
+
+Configurations are applied in the following order (higher is more important):
+
+1. The URL (`?config=##########`)
+2. LocalStorage
+3. Defaults in the code
+
+### Recognized Configuration Parameters
 
 | Parameter                  | Type            | Description |
 | -------------------------- | --------------- | ----------- |
