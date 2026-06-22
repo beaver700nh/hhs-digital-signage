@@ -2,38 +2,42 @@
 
 Source code for signage such as the TV in the lobby. Written by Holliston High School student Minh Le ('26).
 
-This page shows general information about the app interface. For maintenance information, see [SYSADMIN.md](documentation/SYSADMIN.md#maintenance).
+This page shows general information about the app interface. For maintenance information, see [SYSADMIN.md](/documentation/SYSADMIN.md#maintenance).
+
+> [!NOTE]
+> Click [here](/documentation/SYSADMIN.md#updates) for instructions on how to set up deployments if you have forked this repository.
 
 ## Google Calendar API
 
-First, a quick note about the Google Calendar API.
+> [!IMPORTANT]
+> A quick note about the Google Calendar API.
 
-The app needs an API key, which can be set in the configuration as `gapikey`. There are multiple methods; for example, set it in `localStorage` or include it as a query parameter. [See below](#configuration) for more details on configuration.
+The app needs an API key, which can be set in the configuration as `gapikey`. There are multiple methods; for example, set it in LocalStorage or include it as a query parameter. [See below](#configuration) for more details on configuration.
 
-```
-DevTools > Storage > Local Storage > (hosted domain)
-----------------------------------------------------
-Key: gapikey
-Value: XXXXX
-```
-```
-DevTools > Console
-------------------
-> __EXPORT_CONFIG({ gapikey: 'XXXXX' })
-##########
+> `DevTools > Storage > Local Storage > (hosted domain)`
+> ```
+> Key: gapikey
+> Value: XXXXX
+> ```
 
-[https://<address>/?config=##########]
-```
+> `DevTools > Console`
+> ```js
+> > __EXPORT_CONFIG({ gapikey: 'XXXXX' })
+> ##########
+> ```
+> ```
+> [https://<address>/?config=##########]
+> ```
 
 ### Expected Data Format
 
 The app fetches data from several calendars and formats them nicely, but in order to do so it makes some assumptions about the original format of the data.
 
-See [SYSADMIN.md](documentation/SYSADMIN.md#data-guidelines) for specific guidelines.
+See [SYSADMIN.md](/documentation/SYSADMIN.md#data-guidelines) for specific guidelines.
 
 ## Widgets
 
-<img src="documentation/assets/screenshot.png" alt="Screenshot of the app" width="600">
+<img src="/documentation/assets/screenshot.png" alt="Screenshot of the app" width="600">
 
 ### Day Info **<code>&#x25f0;</code>**
 
@@ -48,7 +52,7 @@ Shows the following widgets in a cycle, scrolling horizontally at an interval. T
 
 #### 1. Bell Schedule
 
-<img src="documentation/assets/schedule.png" alt="Screenshot of the widget" width="400">
+<img src="/documentation/assets/schedule.png" alt="Screenshot of the widget" width="400">
 
 - Shows the day's schedule with period start/end times
 - Shows a message on the last school day before a break
@@ -56,14 +60,14 @@ Shows the following widgets in a cycle, scrolling horizontally at an interval. T
 
 #### 2. Upcoming Lunch
 
-<img src="documentation/assets/lunch.png" alt="Screenshot of the widget" width="400">
+<img src="/documentation/assets/lunch.png" alt="Screenshot of the widget" width="400">
 
 - Shows upcoming lunch menus and what day they will be served
 - Specials, sides, vegetarian indicator
 
 #### 3. Upcoming Sports Events
 
-<img src="documentation/assets/athletics.png" alt="Screenshot of the widget" width="400">
+<img src="/documentation/assets/athletics.png" alt="Screenshot of the widget" width="400">
 
 - Shows upcoming sports games with date/time, teams, and location
 - Indicates opponent school, if applicable, and whether it's a home game
@@ -83,11 +87,18 @@ Shows the following widgets in a cycle, scrolling horizontally at an interval. T
 
 ## Configuration
 
-Set these options in LocalStorage as specified, or remove them completely for the default behavior. You may need to reload a widget or the whole page for changes to take effect.
+> [!TIP]
+> Configurations are applied in the following order (higher is more important):
+>
+> 1. The URL (`?config=##########`)
+> 2. LocalStorage
+> 3. Defaults in the code
 
-See [`localStorageDefaults` in the code](src/data/config.ts#L9) for the default values.
+You can set configuration options in LocalStorage as specified, or remove them completely for the default behavior. You may need to reload a widget or the whole page for changes to take effect.
 
-To support environments where LocalStorage is unavailable, the app also accepts configuration as base64-encoded JSON in the `config` query parameter. For convenience, a helper function is exposed in the DevTools console to export a configuration object in this format:
+See [`localStorageDefaults` in the code](/src/data/config.ts#L9) for the default values.
+
+<ins>To support environments where LocalStorage is unavailable, the app also accepts configuration as base64-encoded JSON in the `config` query parameter.</ins> For convenience, a helper function is exposed in the DevTools console to export a configuration object in this format:
 
 ```js
 > __EXPORT_CONFIG({
@@ -102,12 +113,6 @@ This will take configuration you typed and merge it on top of the currently runn
 ```
 https://<address>/?config=##########
 ```
-
-Configurations are applied in the following order (higher is more important):
-
-1. The URL (`?config=##########`)
-2. LocalStorage
-3. Defaults in the code
 
 ### Recognized Configuration Parameters
 
